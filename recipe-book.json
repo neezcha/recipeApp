@@ -1,0 +1,54 @@
+[
+    {
+        "title": "Simple Cereal",
+        "description": "",
+        "cost":"1",
+        "health":"4",
+        "skill": "1",
+        "portion": "1",
+        "ingredients": [ 
+            ["1/2","cup", "milk"], ["1/4","cup","cerial"]
+        ],
+      "steps":[
+        ["1", "Gather ingredients."],
+        ["2", "Pour cerial into a bowl."],
+        ["3", "Pour milk into bowl"]
+        ]
+    },
+    {
+        "title": "Simple Onigiri",
+        "description": "",
+        "cost":"1",
+        "health":"2",
+        "skill": "3",
+        "portion": "1",
+        "ingredients": [ 
+          ["3","cup", "rice"], ["8","sheets","large nori"]
+      ],
+        "steps":[
+          ["1", "Cook the rice and wait for it to cool slightly."],
+          ["2", "Cut nori sheets into smaller squares or small rectangles if desired."],
+          ["3", "Dampen and salt hands."],
+          ["4", "Gather a handful of rice in your hands."],
+          ["5", "Shape the rice into a triangle by cuping both hands and and pressing together. Rotate rice and continue to shape."],
+          ["6", "Repeat to create more onigiri."]
+      ]
+    },
+    {
+        "title": "Ramen",
+        "description": "",
+        "cost":"1",
+        "health":"1",
+        "skill": "1",
+        "portion": "1",
+        "ingredients": [ 
+          ["2","cup", "water"], ["1","pack","ramen"], ["1","optional","egg, vegies, meats, furukake, garlic"]
+      ],
+        "steps":[
+          ["1", "Bring water to a boil."],
+          ["2", "Add ramen."],
+          ["3", "After a minute add additional optional ingredient."],
+          ["4", "Let cook for a total of 3 mintues then serve."]
+      ]
+    }
+  ]
