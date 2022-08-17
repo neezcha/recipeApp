@@ -19,16 +19,35 @@ interface IUpdateIngredientObj {
 }
 
 const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient}) => {
-console.log("Updcate Ingredient Obj at Render Ingredeint")
+
+    const [editing,setEditing] = useState(false);
+    const [amountVal, setAmountVal] = useState<Ingredient["amount"]>(ingredient.amount);
+    const [unitVal, setUnitVal] = useState<Ingredient["unit"]>(ingredient.unit);
+    const [nameVal, setNameVal] = useState<Ingredient["name"]>(ingredient.name);
 
 
-    return <div>
+    return <div className="mr5">
         
-        {ingredient.amount}
+        {/* {" "+ingredient.amount +" "+ ingredient.name +" "+ ingredient.unit+"   "} */}
+        {/*" "+amountVal+" "+unitVal+" "+nameVal+" "*/} 
+
+        {/* <input type={"number"} onChange={(e)=>setAmountVal(100) }/> 
+        <input onChange={(e)=>setUnitVal(e.currentTarget.value) }/>
+        <input onChange={(e)=>setNameVal(e.currentTarget.value) }/>
+         */}
+        {editing === false ? " "+amountVal+" "+unitVal+" "+nameVal+" " : null}
+        {editing === false ? <button type="button" onClick={()=>{setEditing(!editing)}}> Edit </button> :null}
+
+        {editing === true ? <div>
+            <input type={"number"} onChange={(e)=>setAmountVal(Number(e.currentTarget.value) ) } value={amountVal} /> 
+            <input onChange={(e)=>setUnitVal(e.currentTarget.value) } placeholder={unitVal}/>
+            <input onChange={(e)=>setNameVal(e.currentTarget.value) } placeholder={nameVal}/>
+            <button type="button" onClick={()=>{setEditing(!editing)}}> Save </button>
+        </div> : null} 
+
+    
         
-        {ingredient.unit}
-        
-        {ingredient.name}
+
         
     </div>; 
 }

@@ -3,6 +3,7 @@ import { Ingredient } from "../../types/ingredient";
 import { Recipe } from "../../types/recipe";
 import RecipeItem from "../RecipeItem";
 import UpdateIngredient from "../Iterators/UpdateIngredientList"
+import RenderIngredient from "../Iterators/UpdateIngredientObj";
 
 
 interface IAddRecipePage {
@@ -64,8 +65,14 @@ const AddRecipePage : React.FC = () => {
                  * ? (show editing input fields and save button (save button sets recipe with replaced ingredient and sets toggle editing to false))
                  * : (show ingredient in a div or something that doesnt have to be editable)
                  * }
+                 * 
+                 * ******* <div key={ingredient.amount + ingredient.name + ingredient.unit}>{ingredient.amount +''+ ingredient.name +""+ ingredient.unit}</div>
                  */
-                return <div key={ingredient.amount + ingredient.name + ingredient.unit}>{ingredient.amount +''+ ingredient.name +""+ ingredient.unit}</div>
+                
+                return <div>
+                <RenderIngredient ingredient={ingredient}/>
+                
+                </div>
             })}
             <button type={"submit"} onClick={(e)=> {
                 e.preventDefault();
