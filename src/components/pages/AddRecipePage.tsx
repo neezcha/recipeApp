@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Ingredient } from "../../types/ingredient";
 import { Recipe } from "../../types/recipe";
 import RecipeItem from "../RecipeItem";
-import UpdateIngredient from "../Iterators/UpdateIngredientList"
 import RenderIngredient from "../Iterators/UpdateIngredientObj";
+import { json } from "stream/consumers";
 
 
 interface IAddRecipePage {
@@ -68,9 +68,10 @@ const AddRecipePage : React.FC = () => {
                  * 
                  * ******* <div key={ingredient.amount + ingredient.name + ingredient.unit}>{ingredient.amount +''+ ingredient.name +""+ ingredient.unit}</div>
                  */
+               console.log( JSON.stringify(ingredient))
                 
-                return <div>
-                <RenderIngredient ingredient={ingredient}/>
+                return <div key={ingredient.amount+" "+ingredient.amount+" "+ingredient.unit}>
+                <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>
                 
                 </div>
             })}
@@ -84,7 +85,7 @@ const AddRecipePage : React.FC = () => {
             </button>
 
             <button type="button" onClick={()=>setNewRecipe(blankRecipe)}> Reset Recipe </button>
-            <button type="button" onClick={()=>{<UpdateIngredient ingredients={newRecipe.ingredients} />} }> Show Ingredeints</button>
+            {/*<button type="button" onClick={()=>{<UpdateIngredient ingredients={newRecipe.ingredients} />} }> Show Ingredeints</button>*/}
         </form>
 
      </div>; 

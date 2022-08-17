@@ -1,5 +1,6 @@
 import { Ingredient } from "../../types/ingredient"
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Recipe } from "../../types/recipe";
 
 /*************************************
  * Similar to a To Do list: add, update, itterate to display
@@ -15,18 +16,27 @@ import { useEffect, useState } from "react";
 
 interface IUpdateIngredientObj {
     ingredient : Ingredient;
-
+    recipe: Recipe; 
+    setRecipe: Dispatch<SetStateAction<Recipe>> ;
 }
-
-const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient}) => {
+const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,setRecipe}) => {
 
     const [editing,setEditing] = useState(false);
     const [amountVal, setAmountVal] = useState<Ingredient["amount"]>(ingredient.amount);
     const [unitVal, setUnitVal] = useState<Ingredient["unit"]>(ingredient.unit);
     const [nameVal, setNameVal] = useState<Ingredient["name"]>(ingredient.name);
 
+    // ingredients
+    const ingredients = recipe.ingredients
+    // index of ingrident
+    const indexIngredient = ingredients.indexOf(ingredient)
 
-    return <div className="mr5">
+    // spread ingridents into an editable array
+    const newIng = [...ingredients]
+    // edit array in place with new values 
+    newIng.splice(indexIngredient, 1, {amount: amountVal, name: nameVal, unit:unitVal})
+
+    return <div>
         
         {/* {" "+ingredient.amount +" "+ ingredient.name +" "+ ingredient.unit+"   "} */}
         {/*" "+amountVal+" "+unitVal+" "+nameVal+" "*/} 
@@ -38,12 +48,14 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient}) => {
         {editing === false ? " "+amountVal+" "+unitVal+" "+nameVal+" " : null}
         {editing === false ? <button type="button" onClick={()=>{setEditing(!editing)}}> Edit </button> :null}
 
-        {editing === true ? <div>
-            <input type={"number"} onChange={(e)=>setAmountVal(Number(e.currentTarget.value) ) } value={amountVal} /> 
-            <input onChange={(e)=>setUnitVal(e.currentTarget.value) } placeholder={unitVal}/>
-            <input onChange={(e)=>setNameVal(e.currentTarget.value) } placeholder={nameVal}/>
-            <button type="button" onClick={()=>{setEditing(!editing)}}> Save </button>
-        </div> : null} 
+        {editing === true ? <form id={'no-u'}>
+            <input type={"number"} min="0" onChange={(e)=>setAmountVal(Number(e.currentTarget.value) ) } value={amountVal} /> 
+            <input onChange={(e)=>setUnitVal(e.currentTarget.value) } value={unitVal}/>
+            <input onChange={(e)=>setNameVal(e.currentTarget.value) } value={nameVal}/>
+            <button type="submit" onClick={()=>{
+                setRecipe({...recipe,ingredients: newIng})
+                setEditing(!editing)}}> Save </button>
+        </form> : null}
 
     
         
