@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Ingredient } from "../../types/ingredient";
+import { Step } from "../../types/step"
 import { Recipe } from "../../types/recipe";
 import RecipeItem from "../RecipeItem";
 import RenderIngredient from "../Iterators/UpdateIngredientObj";
@@ -20,10 +21,19 @@ const AddRecipePage : React.FC = () => {
         amount: 0,
         unit: "",
         name: ""}
+    const blankStep : Step = {
+        index : 0,
+        instruction : "" }
+    
     const [newRecipe, setNewRecipe] = useState<Recipe>(blankRecipe); //useState is a hook 
+
     const [newIngredient, setNewIngredient] = useState<Ingredient>(blankIngredient);
     const [newIngredientUnit, setnewIngredientUnit] = useState<Ingredient>(blankIngredient);
     const [newIngredientName, setnewIngredientName] = useState<Ingredient>(blankIngredient);
+
+    const [newStep, setNewStep] = useState<Step>(blankStep);
+    const [newStepIndex, setNewStepIndex] = useState<Step>(blankStep);
+    const [newStepInstruction, setNewStepInstruction] = useState<Step>(blankStep);
 
 
     // inferred state
@@ -46,13 +56,13 @@ const AddRecipePage : React.FC = () => {
             <ul>
             <label> Ingredients: </label>
             <input type={"number"} onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value), unit:"", name:""})} placeholder="Amount"/> 
-            <input onChange={(e)=>setnewIngredientUnit({...newIngredientUnit, amount:0, unit:e.currentTarget.value, name:""}) } placeholder={"unit"} />
+            <input onChange={(e)=>setnewIngredientUnit({...newIngredientUnit, amount:0, unit:e.currentTarget.value, name:""}) } placeholder={"Unit"} />
             <input onChange={(e)=>setnewIngredientName({...newIngredientName, amount:0, unit:"TEST", name:e.currentTarget.value}) } placeholder={"Item"} />
             {/* <button type="button" onClick={(e)=>setNewRecipe({ ...newRecipe, ingredients:[...newRecipe.ingredients, {amount: Number(e.currentTarget.value), unit:"", name:""}] })}> Add Ingredient </button> */}
             <button type="button" onClick={(e)=>setNewRecipe({ ...newRecipe, ingredients:[...newRecipe.ingredients, {amount: Number(newIngredient?.amount), unit:newIngredientUnit.unit, name:newIngredientName?.name}] }) }> Add ingredient</button>
             {/* <UpdateIngredient ingredients={newRecipe.ingredients} /> */}
             </ul>
-
+            <ul>
             {ingredientList.map((ingredient)=>{
                 /**
                  * 
@@ -75,6 +85,14 @@ const AddRecipePage : React.FC = () => {
                 
                 </div>
             })}
+            </ul>
+            <ul>
+                <label> Steps: </label>
+                <input type={"number"} min="0" max="1" onChange={(e)=>setNewStepIndex({...newStepIndex, index:Number(e.currentTarget.value) })} placeholder="Index"/> 
+                <input onChange={(e)=>setNewStepInstruction({...newStepInstruction, instruction:(e.currentTarget.value)} )} placeholder={"Step"} />
+                <button type="button" onClick={(e)=>setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: Number(newStep?.index), instruction:newStepInstruction.instruction}] }) }> Add Step</button>
+            </ul>
+
             <button type={"submit"} onClick={(e)=> {
                 e.preventDefault();
                 
@@ -83,8 +101,7 @@ const AddRecipePage : React.FC = () => {
                 }>
                 Print to Console
             </button>
-
-            <button type="button" onClick={()=>setNewRecipe(blankRecipe)}> Reset Recipe </button>
+             <button type="button" onClick={()=>setNewRecipe(blankRecipe)}> Reset Recipe </button>
             {/*<button type="button" onClick={()=>{<UpdateIngredient ingredients={newRecipe.ingredients} />} }> Show Ingredeints</button>*/}
         </form>
 
