@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Ingredient } from "../../types/ingredient";
 import { Step } from "../../types/step"
 import { Recipe } from "../../types/recipe";
 import RecipeItem from "../RecipeItem";
 import RenderIngredient from "../Iterators/UpdateIngredientObj";
 import { json } from "stream/consumers";
+import RenderStep from "../Iterators/UpdateStepsObj";
+import isEqual from "lodash/isEqual";
 
 
 interface IAddRecipePage {
@@ -31,30 +33,45 @@ const AddRecipePage : React.FC = () => {
     const [newIngredientUnit, setnewIngredientUnit] = useState<Ingredient>(blankIngredient);
     const [newIngredientName, setnewIngredientName] = useState<Ingredient>(blankIngredient);
 
-    const [newStep, setNewStep] = useState<Step>(blankStep);
+    const [stepIndex, setStepIndex] = useState<Step>(blankStep);
     const [newStepIndex, setNewStepIndex] = useState<Step>(blankStep);
     const [newStepInstruction, setNewStepInstruction] = useState<Step>(blankStep);
 
 
     // inferred state
     const ingredientList = newRecipe.ingredients
+    const stepsList = newRecipe.steps
+
+    // sort step list
+    useEffect(()=>{
+        const tempList = [...stepsList]
+        tempList.sort((a,b)=>{
+            return a.index - b.index
+        })
+
+        if(!isEqual(tempList, stepsList)){
+            setNewRecipe({ ...newRecipe, steps:tempList})
+        }
+        
+
+    }, [stepsList])
 
     return <div>
         Add Recipe! 
 
         <form> 
             <ul>
-            <label> Recipe Title: </label>
+            <label className="b"> Recipe Title: </label>
             <input onChange={(e)=>setNewRecipe({ ...newRecipe, title:e.currentTarget.value})} value={newRecipe.title} placeholder={"Title"} />
             </ul>
 
             <ul>
-            <label> Recipe Description. </label>
+            <label className="b"> Recipe Description. </label>
             <input onChange={(e)=>setNewRecipe({ ...newRecipe, description:e.currentTarget.value})} value={newRecipe.description} placeholder={"Recipe Description"} />
             </ul>
 
             <ul>
-            <label> Ingredients: </label>
+            <label className="b"> Ingredients: </label>
             <input type={"number"} onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value), unit:"", name:""})} placeholder="Amount"/> 
             <input onChange={(e)=>setnewIngredientUnit({...newIngredientUnit, amount:0, unit:e.currentTarget.value, name:""}) } placeholder={"Unit"} />
             <input onChange={(e)=>setnewIngredientName({...newIngredientName, amount:0, unit:"TEST", name:e.currentTarget.value}) } placeholder={"Item"} />
@@ -78,7 +95,7 @@ const AddRecipePage : React.FC = () => {
                  * 
                  * ******* <div key={ingredient.amount + ingredient.name + ingredient.unit}>{ingredient.amount +''+ ingredient.name +""+ ingredient.unit}</div>
                  */
-               console.log( JSON.stringify(ingredient))
+                console.log( JSON.stringify(ingredient))
                 
                 return <div key={ingredient.amount+" "+ingredient.amount+" "+ingredient.unit}>
                 <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>
@@ -86,16 +103,34 @@ const AddRecipePage : React.FC = () => {
                 </div>
             })}
             </ul>
+
             <ul>
-                <label> Steps: </label>
-                <input type={"number"} min="0" max="1" onChange={(e)=>setNewStepIndex({...newStepIndex, index:Number(e.currentTarget.value) })} placeholder="Index"/> 
-                <input onChange={(e)=>setNewStepInstruction({...newStepInstruction, instruction:(e.currentTarget.value)} )} placeholder={"Step"} />
-                <button type="button" onClick={(e)=>setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: Number(newStep?.index), instruction:newStepInstruction.instruction}] }) }> Add Step</button>
+                <label className="b"> Steps: </label>
+                {/* <input type={"number"} min="0" max="1" onChange={(e)=>setNewStepIndex({...newStepIndex, index:Number(e.currentTarget.value) })} placeholder="Index"/>  */}
+                {/* <input onChange={(e)=>setNewStepInstruction({...newStepInstruction, instruction:(e.currentTarget.value)} )} placeholder={"Step"} />*/}
+                {/* <button type="button" onClick={(e)=>setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: Number(newStepIndex?.index), instruction:newStepInstruction.instruction}] }) }> Add Step</button>*/}
+            </ul>
+            <ul>
+                {stepsList.map((step)=> {
+                    //console.log( JSON.stringify(step))
+                    return <div key={step.index+" "+step.instruction}>
+                        <RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe}/>
+                    </div>
+                })}
+            </ul>
+            <ul>
+                {/*<input type={"number"} min="0" max="1" onChange={(e)=>setNewStepIndex({...newStepIndex, index:Number(e.currentTarget.value) })} placeholder="Index"/> */}
+                <input onChange={(e)=>setNewStepInstruction({...newStepInstruction, instruction:(e.currentTarget.value)} )} />
+                <button type="button" onClick={(e)=> {
+                    const newStepIndexVar = stepsList.length??0
+                    setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepInstruction.instruction}] })
+                    //setNewStepInstruction({...newStepInstruction, instruction:" "} )
+                } }> Add Step</button>
+            
             </ul>
 
             <button type={"submit"} onClick={(e)=> {
                 e.preventDefault();
-                
                 console.log(newRecipe);
                 } 
                 }>
