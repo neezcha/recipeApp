@@ -57,10 +57,6 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
                 setEditing(!editing)}}> Save </button>
         </form> : null}
 
-    
-        
-
-        
     </div>; 
 }
 

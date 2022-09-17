@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Recipe } from "../../types/recipe";
 
 /*************************************
- * Index will be tracked here not by the user
+ *
  * 
  *
  * Usage will be implamented in UpdateIngredientList.tsx
@@ -37,7 +37,40 @@ const RenderStep : React.FC<IUpdateStepObj>= ({step,recipe,setRecipe}) => {
         {editing === false ? " "+indexVal+" "+instructionVal+" ": null}
         {editing === false ? <button type="button" onClick={()=>{setEditing(!editing)}}> Edit </button> :null}
 
-            
+        {editing === true ? <div id={'no-uu'}>
+            {/*<input type={"number"}  onChange={(e)=>setIndexVal(Number(e.currentTarget.value) ) } value={indexVal} /> */}
+            <button onClick={(e)=> {
+                 e.preventDefault();
+                 setIndexVal(Number(indexVal+1))}}
+                 >
+                     up
+            </button>
+            <button onClick={(e)=> {
+                 e.preventDefault();
+                 setIndexVal(Number(indexVal-1))}}
+                 >
+                     down
+            </button>
+            {" "+indexVal+" "}
+            <input onChange={(e)=>setInstructionVal(e.currentTarget.value) } value={instructionVal}/>
+            <button type="submit" onClick={()=>{
+                setRecipe({...recipe,steps: newStep})
+                setEditing(!editing)}}> Save </button>
+        </div> : null}   
+
+        {/*addNew === true? <div>
+            <button onClick={(e)=> {
+                 e.preventDefault();
+                 setIndexVal(Number(indexVal+1))}}> up </button>
+            <button onClick={(e)=> {
+                 e.preventDefault();
+                 setIndexVal(Number(indexVal-1))}}> down </button>
+            {" "+indexVal+" "}
+            <input onChange={(e)=>setInstructionVal(e.currentTarget.value)} placeholder={"Step"} />
+            </div>: null */}
+        {/*addNew === false? <div>
+            <button type="button" onClick={()=>{setAddNew(!addNew)}} > Add Step</button>
+        </div>: null */}
         
     </div>;
 }
