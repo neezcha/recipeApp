@@ -112,7 +112,6 @@ const AddRecipePage : React.FC = () => {
             </ul>
             <ul>
                 {stepsList.map((step)=> {
-                    //console.log( JSON.stringify(step))
                     return <div key={step.index+" "+step.instruction}>
                         <RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe}/>
                     </div>

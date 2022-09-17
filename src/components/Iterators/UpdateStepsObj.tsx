@@ -18,7 +18,6 @@ interface IUpdateStepObj {
 }
 const RenderStep : React.FC<IUpdateStepObj>= ({step,recipe,setRecipe}) => {
 
-    //const [addNew,setAddNew] = useState(false);
     const [editing,setEditing] = useState(false);
     const [indexVal, setIndexVal] = useState<Step["index"]>(step.index);
     const [instructionVal, setInstructionVal] = useState<Step["instruction"]>(step.instruction);
