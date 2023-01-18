@@ -72,7 +72,7 @@ const AddRecipePage : React.FC = () => {
 
             <ul>
             <label className="b"> Ingredients: </label>
-            <input type={"number"} onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value), unit:"", name:""})} placeholder="Amount"/> 
+            <input type={"number"} onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value), unit:"", name:""})} value={newIngredient.amount} placeholder="Amount"/> 
             <input onChange={(e)=>setnewIngredientUnit({...newIngredientUnit, amount:0, unit:e.currentTarget.value, name:""}) } placeholder={"Unit"} />
             <input onChange={(e)=>setnewIngredientName({...newIngredientName, amount:0, unit:"TEST", name:e.currentTarget.value}) } placeholder={"Item"} />
             {/* <button type="button" onClick={(e)=>setNewRecipe({ ...newRecipe, ingredients:[...newRecipe.ingredients, {amount: Number(e.currentTarget.value), unit:"", name:""}] })}> Add Ingredient </button> */}
@@ -97,7 +97,7 @@ const AddRecipePage : React.FC = () => {
                  */
                 console.log( JSON.stringify(ingredient))
                 
-                return <div key={ingredient.amount+" "+ingredient.amount+" "+ingredient.unit}>
+                return <div key={ingredient.amount+" "+ingredient.unit+" "+ingredient.name}>
                 <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>
                 
                 </div>
@@ -135,7 +135,8 @@ const AddRecipePage : React.FC = () => {
                 }>
                 Print to Console
             </button>
-             <button type="button" onClick={()=>setNewRecipe(blankRecipe)}> Reset Recipe </button>
+
+             <button type="button" onClick={()=> setNewRecipe(blankRecipe) }> Reset Recipe </button>
             {/*<button type="button" onClick={()=>{<UpdateIngredient ingredients={newRecipe.ingredients} />} }> Show Ingredeints</button>*/}
         </form>
 

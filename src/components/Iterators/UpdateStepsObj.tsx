@@ -6,8 +6,8 @@ import { Recipe } from "../../types/recipe";
  *
  * 
  *
- * Usage will be implamented in UpdateIngredientList.tsx
-        <RenderIngredient/>
+ * Usage will be implamented in UpdateStepsObj.tsx
+        <RenderStep/>
  *
  *************************************/
 
@@ -43,13 +43,13 @@ const RenderStep : React.FC<IUpdateStepObj>= ({step,recipe,setRecipe}) => {
                  e.preventDefault();
                  setIndexVal(Number(indexVal+1))}}
                  >
-                     up
+                     v
             </button>
             <button onClick={(e)=> {
                  e.preventDefault();
                  setIndexVal(Number(indexVal-1))}}
                  >
-                     down
+                     ^
             </button>
             {" "+indexVal+" "}
             <input onChange={(e)=>setInstructionVal(e.currentTarget.value) } value={instructionVal}/>
