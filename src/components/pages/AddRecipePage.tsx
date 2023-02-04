@@ -52,9 +52,9 @@ const AddRecipePage : React.FC = () => {
         if(!isEqual(tempList, stepsList)){
             setNewRecipe({ ...newRecipe, steps:tempList})
         }
-        
-
     }, [stepsList])
+    //current largest index 
+    const stepIndexMax = stepsList.length
 
     return <div>
         Add Recipe! 
@@ -131,9 +131,10 @@ const AddRecipePage : React.FC = () => {
             <button type={"submit"} onClick={(e)=> {
                 e.preventDefault();
                 console.log(newRecipe);
+                window.localStorage.setItem( newRecipe.title,JSON.stringify(newRecipe) );
                 } 
                 }>
-                Print to Console
+                Save to Loal Storage
             </button>
 
              <button type="button" onClick={()=> setNewRecipe(blankRecipe) }> Reset Recipe </button>

@@ -1,11 +1,9 @@
 import { Step } from "../../types/step"
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Recipe } from "../../types/recipe";
+import { isEqual } from "lodash";
 
 /*************************************
- *
- * 
- *
  * Usage will be implamented in UpdateStepsObj.tsx
         <RenderStep/>
  *
@@ -31,17 +29,20 @@ const RenderStep : React.FC<IUpdateStepObj>= ({step,recipe,setRecipe}) => {
     const newStep = [...steps]
     // edit array in place with new values 
     newStep.splice(indexStep, 1, {index: indexVal, instruction: instructionVal})
+    //max steps
+    const stepMaxIndexs = recipe.steps.length 
 
-
-    return <div>
-        {editing === false ? " "+indexVal+" "+instructionVal+" ": null}
+    return <div>     
         {editing === false ? <button type="button" onClick={()=>{setEditing(!editing)}}> Edit </button> :null}
+        {editing === false ? " "+indexVal+" "+instructionVal+" ": null}
 
         {editing === true ? <div id={'no-uu'}>
             {/*<input type={"number"}  onChange={(e)=>setIndexVal(Number(e.currentTarget.value) ) } value={indexVal} /> */}
             <button onClick={(e)=> {
                  e.preventDefault();
-                 setIndexVal(Number(indexVal+1))}}
+                 var updateVal =indexVal+1; 
+                 if(stepMaxIndexs < indexVal+1){updateVal=indexVal;}
+                 setIndexVal(Number(updateVal))}}
                  >
                      v
             </button>

@@ -1,6 +1,7 @@
 import { Ingredient } from "../../types/ingredient"
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Recipe } from "../../types/recipe";
+import isEqual from "lodash/isEqual";
 
 /*************************************
  * Similar to a To Do list: add, update, itterate to display
@@ -45,8 +46,9 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
         <input onChange={(e)=>setUnitVal(e.currentTarget.value) }/>
         <input onChange={(e)=>setNameVal(e.currentTarget.value) }/>
          */}
-        {editing === false ? " "+amountVal+" "+unitVal+" "+nameVal+" " : null}
         {editing === false ? <button type="button" onClick={()=>{setEditing(!editing)}}> Edit </button> :null}
+        {editing === false ? " "+amountVal+" "+unitVal+" "+nameVal+" " : null}
+        
 
         {editing === true ? <form id={'no-u'}>
             <input type={"number"} min="0" onChange={(e)=>setAmountVal(Number(e.currentTarget.value) ) } value={amountVal} /> 
