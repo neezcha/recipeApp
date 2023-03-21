@@ -24,6 +24,11 @@ const AllRecipiesPage : React.FC = () => {
         JSON.parse(window.localStorage.getItem('loco moco') ?? '' )
     );
 
+    for (var i = 0; i < localStorage.length; i++){
+      // do something with localStorage.getItem(localStorage.key(i));
+      JSON.parse(window.localStorage.key(i) ?? '' )
+    }
+
 
     return <div>
         All Recipies!
@@ -31,8 +36,10 @@ const AllRecipiesPage : React.FC = () => {
         <div>
             <ul> { recipeView.title } </ul>
             <ul> { recipeView.description } </ul>
+            <ul> { recipeView.ingredients.map((thisIng)=>{ return <ul> {thisIng.amount} . {thisIng.unit} : {thisIng.name}</ul> }) }</ul>
             <ul> { recipeView.steps.map((thisStep)=>{ return <ul> {thisStep.index} . {thisStep.instruction} </ul> }) }</ul>
 
+            <ul> {/*gonna need a component hear to iterate through items in local storage and displayakk recipes*/} </ul>
         </div>
           
 

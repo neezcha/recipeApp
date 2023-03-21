@@ -4,6 +4,7 @@ import { Unit } from "../types/unit";
 import { Console } from "console";
 import RecipeItem from "./RecipeItem";
 import NavMenu from "./Menu";
+import { Button } from "@cmsgov/design-system";
 
 const MainPage : React.FC = () => {
 
@@ -51,6 +52,13 @@ const MainPage : React.FC = () => {
    return <div>
     <div>
         <NavMenu/>
+        <Button
+            onAnalyticsEvent={function noRefCheck(){}}
+            onClick={function noRefCheck(){}}
+            variation="solid"
+        >
+        Solid
+        </Button>
     </div>
    </div>
 
