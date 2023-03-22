@@ -1,3 +1,4 @@
+import { Button, VerticalNav } from "@cmsgov/design-system"
 import React, { EventHandler, MouseEventHandler, useEffect, useState } from "react"
 import { menuItem } from "../types/menuItem"
 import UseDestionation from "./Navigation/UseDest"
@@ -27,18 +28,20 @@ const NavMenu : React.FC = () => {
         
     
     return <div>
-        <div id="navMENU">
-            {"MENU"}  
-        </div>          
-        <div className="flex"> 
-        {menuItemsArr.map(element =>{
-            return<div className="pointer mr4" onClick={()=> setDestination(element.dest)} key={element.title}>
-                {element.title} 
+        <div className="ds-u-padding--2 ds-u-padding-bottom--2 ds-u-fill--background-inverse">
+            <h2 className="ds-u-color--white" id="navMENU">
+                {"MENU"}  
+            </h2>          
+            <div className="flex">
+            {menuItemsArr.map(element =>{
+                return<Button onDark variation="solid" className="pointer mr4" onClick={()=> setDestination(element.dest)} key={element.title}>
+                    {element.title} 
+                </Button>
+            })}
             </div>
-        })}
         </div>
         <hr/>
-        <div>
+        <div className="ds-u-margin--1">
             <UseDestionation destination={destination} menuArr={menuItemsArr}/>
             {/* {destination === 'mainPage.tsx' ? <AllRecipiesPage/> : null} */}
             {/* {destination === 'tbd...' ? <>tbd...</> : null} */}

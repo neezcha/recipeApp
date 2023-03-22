@@ -2,6 +2,7 @@ import { Step } from "../../types/step"
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Recipe } from "../../types/recipe";
 import { isEqual } from "lodash";
+import { Button, TextField } from "@cmsgov/design-system";
 
 /*************************************
  * Usage will be implamented in UpdateStepsObj.tsx
@@ -33,46 +34,39 @@ const RenderStep : React.FC<IUpdateStepObj>= ({step,recipe,setRecipe}) => {
     const stepMaxIndexs = recipe.steps.length 
 
     return <div>     
-        {editing === false ? <button type="button" onClick={()=>{setEditing(!editing)}}> Edit </button> :null}
+        {editing === false ? <Button className="ds-u-margin--1 ds-u-padding-y--2" onClick={()=>{setEditing(!editing)}}> 📝 </Button> :null}
         {editing === false ? " "+indexVal+" "+instructionVal+" ": null}
 
         {editing === true ? <div id={'no-uu'}>
-            {/*<input type={"number"}  onChange={(e)=>setIndexVal(Number(e.currentTarget.value) ) } value={indexVal} /> */}
-            <button onClick={(e)=> {
+            <Button className="ds-u-margin--1 ds-u-padding-y--2"
+            onClick={(e)=> {
                  e.preventDefault();
                  var updateVal =indexVal+1; 
                  if(stepMaxIndexs < indexVal+1){updateVal=indexVal;}
                  setIndexVal(Number(updateVal))}}
                  >
-                     v
-            </button>
-            <button onClick={(e)=> {
+                     ⬇
+            </Button>
+            <Button className="ds-u-margin--1 ds-u-padding-y--2"
+            onClick={(e)=> {
                  e.preventDefault();
                  setIndexVal(Number(indexVal-1))}}
                  >
-                     ^
-            </button>
+                     ⬆
+            </Button>
             {" "+indexVal+" "}
-            <input onChange={(e)=>setInstructionVal(e.currentTarget.value) } value={instructionVal}/>
-            <button type="submit" onClick={()=>{
+            <TextField
+                        label=""
+                        name={"editStepInputFeild"+indexVal}
+                        value={instructionVal}
+                        multiline
+                        rows={3}
+                />          
+            <Button className="ds-u-margin--1 ds-u-padding-y--2" 
+                onClick={()=>{
                 setRecipe({...recipe,steps: newStep})
-                setEditing(!editing)}}> Save </button>
-        </div> : null}   
-
-        {/*addNew === true? <div>
-            <button onClick={(e)=> {
-                 e.preventDefault();
-                 setIndexVal(Number(indexVal+1))}}> up </button>
-            <button onClick={(e)=> {
-                 e.preventDefault();
-                 setIndexVal(Number(indexVal-1))}}> down </button>
-            {" "+indexVal+" "}
-            <input onChange={(e)=>setInstructionVal(e.currentTarget.value)} placeholder={"Step"} />
-            </div>: null */}
-        {/*addNew === false? <div>
-            <button type="button" onClick={()=>{setAddNew(!addNew)}} > Add Step</button>
-        </div>: null */}
-        
+                setEditing(!editing)}}> ✔ </Button>
+        </div> : null}           
     </div>;
 }
 

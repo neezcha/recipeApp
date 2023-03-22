@@ -7,7 +7,9 @@ interface IMealPrepPage{
 const MealPrepPage : React.FC = () => {
 
     return <div>
-        Meal Prep!
+        <h4> Meal Prep! </h4>
+       
+       
      </div>; 
 }
 
