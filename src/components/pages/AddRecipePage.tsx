@@ -7,6 +7,7 @@ import RenderIngredient from "../Iterators/UpdateIngredientObj";
 import { json } from "stream/consumers";
 import RenderStep from "../Iterators/UpdateStepsObj";
 import isEqual from "lodash/isEqual";
+import { Button, Text, TextField, TextArea, Select, Strong } from '@radix-ui/themes'
 
 
 interface IAddRecipePage {
@@ -52,58 +53,97 @@ const AddRecipePage : React.FC = () => {
         if(!isEqual(tempList, stepsList)){
             setNewRecipe({ ...newRecipe, steps:tempList})
         }
-        
-
     }, [stepsList])
+    //current largest index 
+    const stepIndexMax = stepsList.length
 
     return <div>
-        Add Recipe! 
+        <h2> Add Recipe! </h2>
 
         <form> 
             <ul>
-            <label className="b"> Recipe Title: </label>
-            <input onChange={(e)=>setNewRecipe({ ...newRecipe, title:e.currentTarget.value})} value={newRecipe.title} placeholder={"Title"} />
+            <Text as="label"><Strong>RecipeTitle:</Strong></Text>
+            <TextField.Root
+                    name="newRecipeTitleInputFeild"
+                    onChange={(e)=>setNewRecipe({ ...newRecipe, title:e.currentTarget.value})} 
+                    value={newRecipe.title}
+                    placeholder={"Enter Recipe Title"}
+                    />
             </ul>
 
             <ul>
-            <label className="b"> Recipe Description. </label>
-            <input onChange={(e)=>setNewRecipe({ ...newRecipe, description:e.currentTarget.value})} value={newRecipe.description} placeholder={"Recipe Description"} />
+            <Text as="label"><Strong>Recipe Description:</Strong></Text>
+            <TextArea
+                    name="newRecipeDescInputFeild"
+                    onChange={(e)=>setNewRecipe({ ...newRecipe, description:e.currentTarget.value})} 
+                    value={newRecipe.description}
+                    placeholder={"Enter Recipe Description"}
+                    rows={3}
+                    />
             </ul>
+            <hr/>
+            <ul className="ds-u-flex-direction--row flex">
+                <h4> Recipe Ingredients </h4>
+                <Text as="label"><Strong>Ingredient Unit:</Strong></Text>
+                <Select.Root 
+                    defaultValue="Unit" 
+                    name="newRecipeIngredientUnitInputFeild" >
+                    <Select.Trigger onChange={(e)=>setnewIngredientUnit({...newIngredientUnit, amount:0, unit:e.currentTarget.value, name:""}) } 
+                    />
+                    <Select.Content>
+                        <Select.Group>
+                        <Select.Label>Fruits</Select.Label>
+                            <Select.Item value="'N/A'">'- Select a Unit of Measurment -</Select.Item>
+                            <Select.Item value="cup">cup</Select.Item>
+                            <Select.Item value="oz" >oz</Select.Item>
+                            <Select.Item value="fl oz">fl oz</Select.Item>
+                            <Select.Item value="tbs" >tbs</Select.Item>
+                            <Select.Item value="tsp" >tsp</Select.Item>
+                        </Select.Group>
+                        <Select.Separator />
+                    </Select.Content>
+                    </Select.Root>
+                <Text as="label"><Strong>Amount of Ingredient:</Strong></Text>
+                <TextField.Root
+                    name="newRecipeIngredientsAmountInputFeild"
+                    autoFocus
+                    size="1"
+                    pattern="[0-9]*"
+                    onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value), unit:"", name:""})} 
+                    value={newIngredient.amount} 
+                    placeholder="Enter Amount of Ingredient"
+                />
+                <Text as="label"><Strong>Ingredient:</Strong></Text>
+                <TextField.Root
+                    name="newRecipeIngredientsNameInputFeild"
+                    onChange={(e)=>setnewIngredientName({...newIngredientName, amount:0, unit:"", name:e.currentTarget.value}) }
+                    value={newIngredientName.name} 
+                    placeholder="Enter Ingredient Name"
+                />
 
-            <ul>
-            <label className="b"> Ingredients: </label>
-            <input type={"number"} onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value), unit:"", name:""})} placeholder="Amount"/> 
-            <input onChange={(e)=>setnewIngredientUnit({...newIngredientUnit, amount:0, unit:e.currentTarget.value, name:""}) } placeholder={"Unit"} />
-            <input onChange={(e)=>setnewIngredientName({...newIngredientName, amount:0, unit:"TEST", name:e.currentTarget.value}) } placeholder={"Item"} />
-            {/* <button type="button" onClick={(e)=>setNewRecipe({ ...newRecipe, ingredients:[...newRecipe.ingredients, {amount: Number(e.currentTarget.value), unit:"", name:""}] })}> Add Ingredient </button> */}
-            <button type="button" onClick={(e)=>setNewRecipe({ ...newRecipe, ingredients:[...newRecipe.ingredients, {amount: Number(newIngredient?.amount), unit:newIngredientUnit.unit, name:newIngredientName?.name}] }) }> Add ingredient</button>
-            {/* <UpdateIngredient ingredients={newRecipe.ingredients} /> */}
+            <div> 
+                <Button
+                className="ds-u-margin-right--2 ds-u-padding-y--2"
+                onClick={(e)=>setNewRecipe({ ...newRecipe, ingredients:[...newRecipe.ingredients, {amount: Number(newIngredient?.amount), unit:newIngredientUnit.unit, name:newIngredientName?.name}] }) }
+                >➕
+                </Button> 
+                <b> Summary: </b>{newIngredient.amount} {newIngredientUnit.unit}  {newIngredientName.name}
+            </div>
+            
             </ul>
             <ul>
+            <h3> Ingredients </h3>
             {ingredientList.map((ingredient)=>{
-                /**
-                 * 
-                 * <NewComponent ingredientList={ingredientList} ingredient=ingredient index=index handleUpdateRecipe=setNewRecipe/>
-                 * 
-                 * 
-                 * const [editing, toggleEditing] = useState(false)
-                 * 
-                 * {isEditing 
-                 * ? (show editing input fields and save button (save button sets recipe with replaced ingredient and sets toggle editing to false))
-                 * : (show ingredient in a div or something that doesnt have to be editable)
-                 * }
-                 * 
-                 * ******* <div key={ingredient.amount + ingredient.name + ingredient.unit}>{ingredient.amount +''+ ingredient.name +""+ ingredient.unit}</div>
-                 */
+
                 console.log( JSON.stringify(ingredient))
                 
-                return <div key={ingredient.amount+" "+ingredient.amount+" "+ingredient.unit}>
+                return <div key={ingredient.amount+" "+ingredient.unit+" "+ingredient.name}>
                 <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>
                 
                 </div>
             })}
             </ul>
-
+            <hr/>
             <ul>
                 <label className="b"> Steps: </label>
                 {/* <input type={"number"} min="0" max="1" onChange={(e)=>setNewStepIndex({...newStepIndex, index:Number(e.currentTarget.value) })} placeholder="Index"/>  */}
@@ -118,24 +158,36 @@ const AddRecipePage : React.FC = () => {
                 })}
             </ul>
             <ul>
-                {/*<input type={"number"} min="0" max="1" onChange={(e)=>setNewStepIndex({...newStepIndex, index:Number(e.currentTarget.value) })} placeholder="Index"/> */}
-                <input onChange={(e)=>setNewStepInstruction({...newStepInstruction, instruction:(e.currentTarget.value)} )} />
-                <button type="button" onClick={(e)=> {
+            <Text as="label"><Strong>New Step:</Strong></Text>
+            <TextField.Root
+                        name="newStepInputFeild"
+                        onClick={(e)=> {
+                            const newStepIndexVar = stepsList.length??0
+                            setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepInstruction.instruction}] })
+                        } }
+                        placeholder="Enter New Step Instructions"
+                       
+                />
+                <Button className="ds-u-margin--1 ds-u-padding-y--2" 
+                    onClick={(e)=> {
                     const newStepIndexVar = stepsList.length??0
                     setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepInstruction.instruction}] })
-                    //setNewStepInstruction({...newStepInstruction, instruction:" "} )
-                } }> Add Step</button>
+                } }> ➕</Button>
             
             </ul>
 
-            <button type={"submit"} onClick={(e)=> {
+            <Button variant="solid" className="ds-u-margin--1" type={"submit"} onClick={(e)=> {
                 e.preventDefault();
                 console.log(newRecipe);
+                window.localStorage.setItem( newRecipe.title ,JSON.stringify(newRecipe) );
+                window.localStorage.setItem( 'recipeList', newRecipe.title );
+
                 } 
                 }>
-                Print to Console
-            </button>
-             <button type="button" onClick={()=>setNewRecipe(blankRecipe)}> Reset Recipe </button>
+                Save to Local Storage
+            </Button>
+
+             <Button className="ds-u-margin--1" type="button" onClick={()=> setNewRecipe(blankRecipe) }> Reset Recipe </Button>
             {/*<button type="button" onClick={()=>{<UpdateIngredient ingredients={newRecipe.ingredients} />} }> Show Ingredeints</button>*/}
         </form>
 
