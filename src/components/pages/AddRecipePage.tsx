@@ -82,7 +82,7 @@ const AddRecipePage : React.FC = () => {
             </Box>
             <Separator size="4"/>
             <Box >
-                <Heading as='h4' size="4"> Recipe Ingredients</Heading>
+                <Text as="label"><Strong>Recipe Ingredients</Strong></Text>
             <Box>
                 <Card size="4">
                     <Grid gap="3" align="center" columns="1">
@@ -105,8 +105,8 @@ const AddRecipePage : React.FC = () => {
                                     <Select.Separator />
                                 </Select.Content>
                                 </Select.Root>
-                            </Flex>
-                            <Box>    
+                        </Flex>
+                        <Box>    
                                 <Text as="label"><Strong>Amount of Ingredient:</Strong></Text>
                                 <TextField.Root
                                     name="newRecipeIngredientsAmountInputFeild"
@@ -117,8 +117,8 @@ const AddRecipePage : React.FC = () => {
                                     value={newIngredient.amount} 
                                     placeholder="Enter Amount of Ingredient"
                                 />
-                             </Box>
-                             <Box>   
+                        </Box>
+                        <Box>   
                                 <Text as="label"><Strong>Ingredient:</Strong></Text>
                                 <TextField.Root
                                     name="newRecipeIngredientsNameInputFeild"
@@ -147,7 +147,7 @@ const AddRecipePage : React.FC = () => {
 
 
             <Box>
-            <Heading as="h3" size="4"> Ingredients </Heading>
+            <Text as="label"><Strong>Ingredients</Strong></Text>
             {ingredientList.map((ingredient)=>{
 
                 console.log( JSON.stringify(ingredient))
