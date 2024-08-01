@@ -1,4 +1,4 @@
-import React, { EventHandler, MouseEventHandler, useEffect, useState } from "react"
+import React, { Dispatch, EventHandler, MouseEventHandler, SetStateAction, useEffect, useState } from "react"
 import { menuItem } from "../types/menuItem"
 import UseDestionation from "./Navigation/UseDest"
 import AllRecipiesPage from "./pages/AllRecipiesPage"
@@ -7,23 +7,39 @@ import { Button, Checkbox, Heading, Flex, Separator, Switch } from '@radix-ui/th
 interface IMenu{
     menuItem: menuItem
 }
+const allRecipies : menuItem = {
+    title : "All Recipies",
+    dest : "AllRecipiesPage"
+}
+const addRecipies : menuItem = {
+    title : "Add a Recipe",
+    dest : "AddRecipePage"
+}
+const mealPrep : menuItem = {
+    title : "Meal Prep",
+    dest : "MealPrepPage"
+}
+export const navMenuItemArray : menuItem[] = [allRecipies, addRecipies, mealPrep];
 
-const NavMenu : React.FC = () => {
-    const allRecipies : menuItem = {
-        title : "All Recipies",
-        dest : "AllRecipiesPage"
-    }
-    const addRecipies : menuItem = {
-        title : "Add a Recipe",
-        dest : "AddRecipePage"
-    }
-    const mealPrep : menuItem = {
-        title : "Meal Prep",
-        dest : "MealPrepPage"
-    }
-    const menuItemsArr :menuItem[] = [allRecipies, addRecipies, mealPrep];
-    
-    const [destination,setDestination] = useState<string>("");
+
+interface INavMenuProps {
+    setDestination: Dispatch<SetStateAction<string>>,
+}
+
+const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {
+const allRecipies : menuItem = {
+    title : "All Recipies",
+    dest : "AllRecipiesPage"
+}
+const addRecipies : menuItem = {
+    title : "Add a Recipe",
+    dest : "AddRecipePage"
+}
+const mealPrep : menuItem = {
+    title : "Meal Prep",
+    dest : "MealPrepPage"
+}
+const menuItemsArr :menuItem[] = [allRecipies, addRecipies, mealPrep];
     
     return <>
         <div id="navMENU">
@@ -49,11 +65,7 @@ const NavMenu : React.FC = () => {
                     <Switch defaultChecked />
                 </Flex>
             </Flex>
-        </div>          
-        <Separator orientation="horizontal" size="4" color="cyan" />
-        <Flex as="div" p="3">
-            <UseDestionation destination={destination} menuArr={menuItemsArr}/>
-        </Flex>
+        </div>
     </>;
 }
 
