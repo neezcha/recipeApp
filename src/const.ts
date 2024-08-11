@@ -16,3 +16,24 @@ export const exampleMap = {
 /*** UNITS OF MEASURMENT ***/
 
 /*** UNIT CONVERSION RATES ***/
+
+/*** RECIPE SPECS ***/
+export interface CommonProps {
+    disabled?: boolean;
+    validation?: RegExp | ((val: any) => boolean);
+    errorText?: string;
+    helpText?: string;
+    label: string; 
+    requried?: string; 
+    placeholder?: string; 
+    defaultValue?: any;
+    valueGetter?: (val: string) => string; // fn return formatted value
+}
+export interface InputSegment extends CommonProps {
+    type: 'number' | 'boolean' | 'string';
+}
+export interface DropDownSegment extends CommonProps {
+    type: 'dropdown';
+    choices?: string[];
+    dataSource?: string; 
+}

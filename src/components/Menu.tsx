@@ -26,21 +26,7 @@ interface INavMenuProps {
     setDestination: Dispatch<SetStateAction<string>>,
 }
 
-const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {
-const allRecipies : menuItem = {
-    title : "All Recipies",
-    dest : "AllRecipiesPage"
-}
-const addRecipies : menuItem = {
-    title : "Add a Recipe",
-    dest : "AddRecipePage"
-}
-const mealPrep : menuItem = {
-    title : "Meal Prep",
-    dest : "MealPrepPage"
-}
-const menuItemsArr :menuItem[] = [allRecipies, addRecipies, mealPrep];
-    
+const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {    
     return <>
         <div id="navMENU">
             <Flex as="span" align="center" justify="between" gap="4" px="3">
@@ -48,7 +34,7 @@ const menuItemsArr :menuItem[] = [allRecipies, addRecipies, mealPrep];
                     <Heading as="h1" color="cyan">The Menu </Heading>
                 </Flex>
                 <Flex justify="center" gap="3">
-                    {menuItemsArr.map(element =>{
+                    {navMenuItemArray.map(element =>{
                         return<>
                         <Button 
                             className="pointer mr4" 
