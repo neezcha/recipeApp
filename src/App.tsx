@@ -6,7 +6,7 @@ import MainPage from './components/MainPage';
 
 function App() {
   return (
-    <Theme>
+    <Theme accentColor="cyan">
       <MainPage/>
     </Theme>
   );

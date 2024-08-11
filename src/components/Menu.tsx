@@ -29,16 +29,15 @@ interface INavMenuProps {
 const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {    
     return <>
         <div id="navMENU">
-            <Flex as="span" align="center" justify="between" gap="4" px="3">
+            <Flex as="span" align="center" justify="between" gap="4" p="3">
                 <Flex justify="start" gap="3">
-                    <Heading as="h1" color="cyan">The Menu </Heading>
+                    <Heading as="h1" color={'cyan'}>The Menu </Heading>
                 </Flex>
                 <Flex justify="center" gap="3">
                     {navMenuItemArray.map(element =>{
                         return<>
                         <Button 
-                            className="pointer mr4" 
-                            color="cyan"
+                            className="pointer mr4"
                             variant="surface"
                             onClick={()=> setDestination(element.dest)} 
                             key={element.title}>
