@@ -9,7 +9,7 @@ import RenderStep from "../Iterators/UpdateStepsObj";
 import isEqual from "lodash/isEqual";
 import { Card, Button, Box, Text, TextField, TextArea, Heading, Flex, Grid, Select, Separator, Strong, Checkbox } from '@radix-ui/themes'
 import { DropDownSegment, InputSegment } from "../../const";
-import { Pencil2Icon, CheckCircledIcon, PlusCircledIcon, CrossCircledIcon, ThickArrowDownIcon, ThickArrowUpIcon } from '@radix-ui/react-icons'
+import { CheckCircledIcon, PlusCircledIcon, CrossCircledIcon, ThickArrowDownIcon, ThickArrowUpIcon, StarIcon, StarFilledIcon } from '@radix-ui/react-icons'
 
 
 /***
@@ -175,15 +175,10 @@ const AddRecipePage : React.FC = () => {
     const [newIngredientUnit, setnewIngredientUnit] = useState<Ingredient>(blankIngredient);
     const [newIngredientName, setnewIngredientName] = useState<Ingredient>(blankIngredient);
 
-    const [stepIndex, setStepIndex] = useState<Step>(blankStep);
-    const [newStepIndex, setNewStepIndex] = useState<Step>(blankStep);
-    const [newStepInstruction, setNewStepInstruction] = useState<Step>(blankStep);
-
-
+    const [newStepDesc, setNewStepDesc] = useState<string>();
     // inferred state
-    const ingredientList = newRecipe.ingredients
-    const stepsList = newRecipe.steps
-
+    const ingredientList = newRecipe.ingredients;
+    const stepsList = newRecipe.steps;
     // sort step list
     useEffect(()=>{
         const tempList = [...stepsList]
@@ -194,9 +189,7 @@ const AddRecipePage : React.FC = () => {
         if(!isEqual(tempList, stepsList)){
             setNewRecipe({ ...newRecipe, steps:tempList})
         }
-    }, [stepsList])
-    //current largest index 
-    const stepIndexMax = stepsList.length
+    }, [stepsList]);
 
     return (
         <Flex id={'new-recipe-page'} as={"span"} m={'4'}>
@@ -204,7 +197,7 @@ const AddRecipePage : React.FC = () => {
                 <Flex gap={'2'} direction={'column'}>
                     <Heading as="h2"> Add Recipe! </Heading>
                     <Text size={'2'} weight={'light'} color={'gray'}>
-                    All bread is made of wood, / cow dung, packed brown moss, / the bodies of dead animals, the teeth / and backbones, what is left / after the ravens. This dirt / flows through the stems into the grain, / into the arm, nine strokes / of the axe, skin from a tree, / good water which is the first / gift, four hours. //    / Live burial under a moist cloth, / a silver dish, the row / of white famine bellies / swollen and taut in the oven, / lungfuls of warm breath stopped / in the heat from an old sun. //   / Good bread has the salt taste / of your hands after nine / strokes of the axe, the salt / taste of your mouth, it smells / of its own small death, of the deaths / before and after. //   / Lift these ashes / into your mouth, your blood; / to know what you devour / is to consecrate it, / almost. All bread must be broken / so it can be shared. Together / we eat this earth. // 
+                    All bread is made of wood, / cow dung, packed brown moss, / the bodies of dead animals, the teeth / and backbones, what is left / after the ravens. This dirt / flows through the stems into the grain, / into the arm, nine strokes / of the axe, skin from a tree, / good water which is the first / gift, four hours. //    / Live burial under a moist cloth, / a silver dish, the row / of white famine bellies / swollen and taut in the oven, / lungfuls of warm breath stopped / in the heat from an old sun. //   / Good bread has the salt taste / of your hands after nine / strokes of the axe, the salt / taste of your mouth, it smells / of its own small death, of the deaths / before and after. //   / Lift these ashes / into your mouth, your blood; / to know what you devour / is to consecrate it, / almost. All bread must be broken / so it can be shared. Together / we eat this earth. // - Margret Atwood
                     </Text>
                 </Flex>
                 <Flex width={'100%'} py={'5'}>
@@ -326,7 +319,7 @@ const AddRecipePage : React.FC = () => {
                                                 size="2"
                                                 style={{width: '70px'}}
                                                 pattern="[0-9]*"
-                                                onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value), unit:"", name:""})} 
+                                                onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value)})} 
                                                 value={newIngredient.amount} 
                                                 placeholder="Enter Amount of Ingredient"
                                             />
@@ -336,7 +329,7 @@ const AddRecipePage : React.FC = () => {
                                             <Select.Root 
                                             defaultValue="unit" 
                                             name="newRecipeIngredientUnitInputFeild" >
-                                            <Select.Trigger onChange={(e)=>setnewIngredientUnit({...newIngredientUnit, amount:0, unit:e.currentTarget.value, name:""}) } 
+                                            <Select.Trigger onChange={(e)=>setNewIngredient({...newIngredient, unit:e.currentTarget.value}) } 
                                             />
                                             <Select.Content >
                                                 <Select.Group>
@@ -356,28 +349,36 @@ const AddRecipePage : React.FC = () => {
                                             <Text as="label"><Strong>Ingredient:</Strong></Text>
                                             <TextField.Root
                                                 name="newRecipeIngredientsNameInputFeild"
-                                                onChange={(e)=>setnewIngredientName({...newIngredientName, amount:0, unit:"", name:e.currentTarget.value}) }
-                                                value={newIngredientName.name} 
+                                                onChange={(e)=>setNewIngredient({...newIngredient, name:e.currentTarget.value}) }
+                                                value={newIngredient.name} 
                                                 placeholder="Enter Ingredient Name"
                                                 style={{width: '100%'}}
                                             />
                                         </Flex>
                                     </Flex>
                                     <Flex justify="end" align={'end'} gap="3" m={'3'} direction={'column'}>
-                                        {/*** TO DO ingredient.editing ? (<Button variant={'ghost'} radius={'full'} size={'4'}> <CrossCircledIcon style={{height:'30px'}}/> Delete </Button>): null ***/}
-                                        <Button variant={'ghost'} radius={'full'} size={'4'}>
+                                        <Button 
+                                            variant={'ghost'} 
+                                            radius={'full'} 
+                                            size={'4'}
+                                            onClick={()=>{
+                                                /** TO DO ingredients validation **/
+                                                setNewRecipe({...newRecipe, ingredients: [...newRecipe.ingredients, newIngredient]});
+                                                setNewIngredient(blankIngredient);
+                                            }}
+                                            >
                                             <CheckCircledIcon style={{height:'30px'}}/>
-                                            {/*** TO DO ingredient.editing ? <CheckCircledIcon style={{height:'30px'}}/> : </Pencil2Icon style={{height:'30px'}}/> ***/}
                                         </Button>
                                     </Flex>
                                 </Flex>
                             </Card>
+                            {/** sad to see this go thought it was cute **
                             <Flex p={'2'} mx={'2'}>
                                 <Button variant={'soft'}>
                                     <PlusCircledIcon style={{height:'30px'}}/>
                                     <Text>{" "}Add Ingredient</Text>
                                 </Button>
-                            </Flex>
+                            </Flex> **/}
                         </Flex>
                     </Flex>
                     {/*** SECTION Steps ***/}
@@ -399,10 +400,6 @@ const AddRecipePage : React.FC = () => {
                                             autoFocus
                                             size="2"
                                             style={{width: '100%'}}
-                                            onClick={(e)=> {
-                                                const newStepIndexVar = stepsList.length??0
-                                                setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepInstruction.instruction}] })
-                                            } }
                                             value={step.instruction} 
                                             placeholder={step.instruction}
                                         />
@@ -423,16 +420,77 @@ const AddRecipePage : React.FC = () => {
                                 </Flex>
                             </Card>)
                         })}
-                        <Flex p={'2'} mx={'2'}>
-                                <Button variant={'soft'}>
-                                    <PlusCircledIcon style={{height:'30px'}}/>
-                                    <Text>{" "}Add Step</Text>
-                                </Button>
+                        <Card style={{width: '100%', background:'#BBF3FEF7'}}>
+                            <Flex as='span' justify="between" p={'2'}>
+                                <Flex justify="start" gap="3">
+                                    {stepsList.length}
+                                </Flex>
+                                <Flex justify="start" gap="3" style={{width: '90%'}}>
+                                    <TextArea
+                                        name="newStepInputFeild"
+                                        autoFocus
+                                        size="2"
+                                        style={{width: '100%'}}
+                                        onChange={(e)=>setNewStepDesc(e.currentTarget.value)}
+                                        value={newStepDesc}
+                                        placeholder="Enter New Step Instructions"
+                                    />
+                                </Flex>
+                                <Flex justify="end" align={'end'} gap="3" m={'3'} direction={'row'}>
+                                    <Button 
+                                        variant={'ghost'} 
+                                        radius={'full'} 
+                                        size={'4'} 
+                                        onClick={(e)=> {
+                                            /** TO DO steps validation **/
+                                            const newStepIndexVar = stepsList.length??0;
+                                            setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepDesc??""}] });
+                                            setNewStepDesc("");
+                                        }}
+                                    >
+                                        <CheckCircledIcon style={{height:'30px'}}/>
+                                    </Button>
+                                </Flex>
                             </Flex>
+                        </Card>
+                        {/** maybe not best ui idk **
+                        <Flex p={'2'} mx={'2'}>
+                            <Button variant={'soft'} onClick={()=>setBoolAddingNewStep(true)}>
+                                <PlusCircledIcon style={{height:'30px'}}/>
+                                <Text>{" "}Add Step</Text>
+                            </Button>
+                        </Flex>**/}
+                         </Flex>
+                    </Flex>
+                    {/*** SECTION Ratings ***/}
+                    <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'} py={'3'}>
+                        <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'}>
+                            <Heading as="h3"> Ratings </Heading>
+                            <Card style={{width: '100%'}}>
+                                <Flex as='span' justify="between" p={'2'} width={'100%'}>
+                                    {/*** TO DO ratingOptions.map((rating)=>(<></>)) ***/}
+                                    <Flex gap={'2'} align={'center'}>
+                                        <Text as="label" color="gray"> <Strong>Vibe</Strong></Text>
+                                    <Button>
+                                        <StarFilledIcon/>
+                                    </Button>
+                                    <Button>
+                                        <StarFilledIcon/>
+                                    </Button>
+                                    <Button>
+                                        <StarFilledIcon/>
+                                    </Button>
+                                    <Button>
+                                        <StarIcon/>
+                                    </Button>
+                                    <Button>
+                                        <StarIcon/>
+                                    </Button>
+                                    </Flex>
+                                </Flex>
+                            </Card>
                         </Flex>
                     </Flex>
-
-                    
                 </Flex>
                 {/******* OLD BELOW ********/}
                 <Grid p="5"  gap="3"> 
@@ -508,8 +566,10 @@ const AddRecipePage : React.FC = () => {
                     <div> 
                         <Button
                             className="ds-u-margin-right--2 ds-u-padding-y--2"
-                            onClick={(e)=>setNewRecipe({ ...newRecipe, ingredients:[...newRecipe.ingredients, {amount: Number(newIngredient?.amount), unit:newIngredientUnit.unit, name:newIngredientName?.name}] }) }
-                        >➕p
+                            onClick={(e)=>setNewRecipe({ ...newRecipe, 
+                                ingredients:[...newRecipe.ingredients, {amount: Number(newIngredient?.amount), unit:newIngredientUnit.unit, name:newIngredientName?.name}] 
+                            }) }
+                        >➕
                         </Button> 
                         <Text> { "Summary: "} {newIngredient.amount} {", "} {newIngredientUnit.unit} {", "} {newIngredientName.name} </Text>
                     </div>
@@ -547,7 +607,7 @@ const AddRecipePage : React.FC = () => {
                                 name="newStepInputFeild"
                                 onClick={(e)=> {
                                     const newStepIndexVar = stepsList.length??0
-                                    setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepInstruction.instruction}] })
+                                    setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepDesc??""}] })
                                 } }
                                 placeholder="Enter New Step Instructions"
                             
@@ -555,7 +615,7 @@ const AddRecipePage : React.FC = () => {
                         <Button className="ds-u-margin--1 ds-u-padding-y--2" 
                             onClick={(e)=> {
                             const newStepIndexVar = stepsList.length??0
-                            setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepInstruction.instruction}] })
+                            setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepDesc??""}] })
                         } }> ➕</Button>
                     
                     </Box>

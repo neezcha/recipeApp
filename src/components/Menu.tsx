@@ -1,7 +1,5 @@
-import React, { Dispatch, EventHandler, MouseEventHandler, SetStateAction, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction} from "react"
 import { menuItem } from "../types/menuItem"
-import UseDestionation from "./Navigation/UseDest"
-import AllRecipiesPage from "./pages/AllRecipiesPage"
 import { Button, Checkbox, Heading, Flex, Separator, Switch } from '@radix-ui/themes'
 
 interface IMenu{
