@@ -11,11 +11,6 @@ interface IUseDest{
 
 const UseDestionation : React.FC<IUseDest> = ({destination, menuArr}) => {
 
-    useEffect(()=>{
-        console.log(destination)
-    },[destination])
-
- 
     const result = menuArr.filter((m)=> m.dest === destination)[0]?.dest ?? undefined
 
     return <div>

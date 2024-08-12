@@ -11,143 +11,6 @@ import { Card, Button, Box, Text, TextField, TextArea, Heading, Flex, Grid, Sele
 import { DropDownSegment, InputSegment } from "../../const";
 import { CheckCircledIcon, PlusCircledIcon, CrossCircledIcon, ThickArrowDownIcon, ThickArrowUpIcon, StarIcon, StarFilledIcon } from '@radix-ui/react-icons'
 
-
-/***
- * Helper method to render form conrol.  
- * @param appState pointer to global app state
- * @param varName variable name from flow's set-variable section
- * @param spec form control's input type
- * @param variables pointer to the variables state in teh workflow component
- * @param variablesState pointer to the variable validation state in workflow component 
- * @param setVariables pointer to the setter for the variable state 
- * @param setVariablesState pointer to the setVariableStates (validation status) state
- ***/
-export interface IRenderContolerProps{
-    appState: any; /** TO DO make appSate and specify type here */
-    varName: string;
-    spec: InputSegment | DropDownSegment;
-    variables: any
-    variablesState: any;
-    setVariables: (variables: any) => void;
-    setVariablesStatus: (variablesStae: any) => void;
-}
-export const rederControler: React.FC<IRenderContolerProps>  = (
- {  appState,
-    varName,
-    spec,
-    variables,
-    variablesState,
-    setVariables,
-    setVariablesStatus,
-}) => {
-    if(!spec) return null;
-    spec = spec as any; 
-
-    switch(spec.type){
-        case 'dropdown':
-            return(
-                <Select.Root
-                    defaultValue={spec.defaultValue}
-                    onValueChange={(val) =>{
-                        setVariables({...variables, [varName]: val});
-                        if(spec.validation && spec.validation instanceof RegExp){
-                            setVariablesStatus({
-                                ...variablesState,
-                                [varName]: val.match(spec.validation),
-                            });
-                        } else if(spec.validation && typeof spec.validation === 'function'){
-                            setVariablesStatus({
-                                ...variablesState,
-                                [varName]: Boolean(spec.validation(val)),
-                            });
-                        }
-                    }}   
-                >
-                    <Select.Trigger id={`dropdonw-${varName}`} placeholder={spec.placeholder}/>
-                    <Select.Content>
-                        {/** TO DO:  appState? or render from static set of choices given**/}
-                        {/***
-                            spec.dataSource 
-                            ? appState.[spec.dataSource]?.map((item: any, index: number) => (
-                                <Select.Item key={`${item}-${index}`} id={item} value={item}>
-                                    {item}
-                                </Select.Item>
-
-                            )) 
-                            : spec.choices?.map((item: any, index: number) => (
-                                <Select.Item key={`${item}-${index}`} id={item} value={item}>
-                                    {item}
-                                </Select.Item>
-                            ))
-                        ***/}
-                        {
-                        spec.choices?.map((item, index) => (
-                            <Select.Item key={`${item}-${index}`} id={item} value={item}>
-                                {item}
-                            </Select.Item>)
-                        )}
-                    </Select.Content>
-                </Select.Root>
-
-            );    
-        case 'boolean':
-            return(
-                <Checkbox
-                    id={`input-${varName}`}
-                    value={variables[varName]}
-                    disabled={spec.disabled}
-                    onCheckedChange={(e: boolean)=>{ setVariables({...variables, [varName]: e}) }}
-                />
-            );   
-        case 'number':
-            return (
-                <TextField.Root
-                id={`input-${varName}`}
-                type={spec.type}
-                placeholder={spec.placeholder}
-                value={variables.varName}
-                disabled={spec.disabled}
-                onChange={(e)=>{
-                    setVariables({...variables, [varName]: e.target.value});
-                    if(spec.validation && spec.validation instanceof RegExp){
-                        setVariablesStatus({
-                            ...variablesState,
-                            [varName]: e.target.value.match(spec.validation),
-                        });
-                    } else if(spec.validation && typeof spec.validation === 'function') {
-                        setVariablesStatus({
-                            ...variablesState,
-                            [varName]: Boolean(spec.validation(e.target.value)),
-                        });
-                    }
-                }}
-            ></TextField.Root>)
-        case 'string':
-            return(
-                <TextField.Root
-                    id={`input-${varName}`}
-                    placeholder={spec.placeholder}
-                    value={variables.varName}
-                    disabled={spec.disabled}
-                    onChange={(e)=>{
-                        setVariables({...variables, [varName]: e.target.value});
-                        if(spec.validation && spec.validation instanceof RegExp){
-                            setVariablesStatus({
-                                ...variablesState,
-                                [varName]: e.target.value.match(spec.validation),
-                            });
-                        } else if(spec.validation && typeof spec.validation === 'function') {
-                            setVariablesStatus({
-                                ...variablesState,
-                                [varName]: Boolean(spec.validation(e.target.value)),
-                            });
-                        }
-                    }}
-                ></TextField.Root>
-            );
-    }
-};
-
 /***
  * TO DO: update to EditRecipePage (empty recipe means new recipe) 
  * @param recipeObj 
@@ -244,11 +107,13 @@ const AddRecipePage : React.FC = () => {
                             <Heading as="h3"> Ingredients </Heading>
                             {/************ ingredients.map((ingredient, index) => (<Card></Card>)) ***********/}
                             {ingredientList.map((ingredient)=>{
-                                console.log( JSON.stringify(ingredient) );
-                                console.log( ingredient.amount+" "+ingredient.unit+" "+ingredient.name );
-                                console.log( "<RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>" );
+                                // console.log( JSON.stringify(ingredient) );
+                                // console.log( ingredient.amount+" "+ingredient.unit+" "+ingredient.name );
+                                // console.log( "<RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>" );
 
                                 return (
+                                    <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>
+                                    /***
                                     <Card style={{width: '100%'}}>
                                         <Flex as='span' justify="between" p={'2'}>
                                             <Flex justify="start" gap="3" style={{width: '90%'}}>
@@ -274,7 +139,7 @@ const AddRecipePage : React.FC = () => {
                                                     />
                                                     <Select.Content>
                                                         <Select.Group>
-                                                            {/*** TO DO units.map((unit)=>(<Select.Item value={`unit-${unit}`}>{unit}</Select.Item>)) ***/}
+                                                            {/*** TO DO units.map((unit)=>(<Select.Item value={`unit-${unit}`}>{unit}</Select.Item>)) ***
                                                             <Select.Item value="unit" disabled>---</Select.Item>
                                                             <Select.Item value="cup">cup</Select.Item>
                                                             <Select.Item value="oz" >oz</Select.Item>
@@ -298,14 +163,15 @@ const AddRecipePage : React.FC = () => {
                                                 </Flex>
                                             </Flex>
                                             <Flex justify="end" align={'end'} gap="3" m={'3'} direction={'column'}>
-                                                {/*** TO DO ingredient.editing ? (<Button variant={'ghost'} radius={'full'} size={'4'}> <CrossCircledIcon style={{height:'30px'}}/> Delete </Button>): null ***/}
+                                                {/*** TO DO ingredient.editing ? (<Button variant={'ghost'} radius={'full'} size={'4'}> <CrossCircledIcon style={{height:'30px'}}/> Delete </Button>): null ***
                                                 <Button variant={'ghost'} radius={'full'} size={'4'}>
                                                     <CrossCircledIcon style={{height:'30px'}}/>
-                                                    {/*** TO DO ingredient.editing ? <CheckCircledIcon style={{height:'30px'}}/> : </Pencil2Icon style={{height:'30px'}}/> ***/}
+                                                    {/*** TO DO ingredient.editing ? <CheckCircledIcon style={{height:'30px'}}/> : </Pencil2Icon style={{height:'30px'}}/> ***
                                                 </Button>
                                             </Flex>
                                         </Flex>
                                     </Card>
+                                    ***/
                                 )
                             })}
                             <Card style={{width: '100%', background:'#BBF3FEF7'}}>
@@ -379,8 +245,8 @@ const AddRecipePage : React.FC = () => {
                         <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'}>
                             <Heading as="h3"> Instructions </Heading>
                             {stepsList.map((step)=> {
-                                console.log(step.index+" "+step.instruction);
-                                console.log("<RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe}/>");
+                                // console.log(step.index+" "+step.instruction);
+                                // console.log("<RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe}/>");
                             return (
                                 <Card style={{width: '100%'}}>
                                 <Flex as='span' justify="between" p={'2'}>
@@ -585,11 +451,9 @@ const AddRecipePage : React.FC = () => {
                     <Box>
                     <Text as="label"><Strong>Ingredients</Strong></Text>
                     {ingredientList.map((ingredient)=>{
-
-                        console.log( JSON.stringify(ingredient))
-                        
+                        // console.log( JSON.stringify(ingredient))
                         return <div key={ingredient.amount+" "+ingredient.unit+" "+ingredient.name}>
-                        <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>
+                        {/* <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/> */}
                         
                         </div>
                     })}
@@ -630,7 +494,7 @@ const AddRecipePage : React.FC = () => {
                     <Button variant="solid" className="ds-u-margin--1" type={"submit"} 
                         onClick={(e)=> {
                         e.preventDefault();
-                        console.log(newRecipe);
+                        // console.log(newRecipe);
                         window.localStorage.setItem( newRecipe.title ,JSON.stringify(newRecipe) );
                         window.localStorage.setItem( 'recipeList', newRecipe.title );
 

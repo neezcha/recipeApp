@@ -31,7 +31,6 @@ const MainPage : React.FC = () => {
             {index:4, instruction:"Pour Milk into bowl."}
         ] 
     };
-    const whateves = ()=>console.log("test text");
     const recipes :Recipe[] = [cereal, {...cereal, title: "Complex Cereal"}];
 
     /*********** END TO DO  *********************************************/

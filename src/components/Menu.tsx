@@ -33,15 +33,15 @@ const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {
                 </Flex>
                 <Flex justify="center" gap="3">
                     {navMenuItemArray.map(element =>{
-                        return<>
+                        return(
                         <Button 
                             className="pointer mr4"
                             variant="surface"
                             onClick={()=> setDestination(element.dest)} 
-                            key={element.title}>
+                            key={element.dest}>
                         {element.title} 
                         </Button>
-                    </>})}
+                    )})}
                 </Flex>
                 <Flex justify="end" gap="3"> 
                     <Checkbox defaultChecked />
