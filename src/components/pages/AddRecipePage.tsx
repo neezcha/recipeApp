@@ -372,13 +372,6 @@ const AddRecipePage : React.FC = () => {
                                     </Flex>
                                 </Flex>
                             </Card>
-                            {/** sad to see this go thought it was cute **
-                            <Flex p={'2'} mx={'2'}>
-                                <Button variant={'soft'}>
-                                    <PlusCircledIcon style={{height:'30px'}}/>
-                                    <Text>{" "}Add Ingredient</Text>
-                                </Button>
-                            </Flex> **/}
                         </Flex>
                     </Flex>
                     {/*** SECTION Steps ***/}
@@ -453,14 +446,7 @@ const AddRecipePage : React.FC = () => {
                                 </Flex>
                             </Flex>
                         </Card>
-                        {/** maybe not best ui idk **
-                        <Flex p={'2'} mx={'2'}>
-                            <Button variant={'soft'} onClick={()=>setBoolAddingNewStep(true)}>
-                                <PlusCircledIcon style={{height:'30px'}}/>
-                                <Text>{" "}Add Step</Text>
-                            </Button>
-                        </Flex>**/}
-                         </Flex>
+                        </Flex>
                     </Flex>
                     {/*** SECTION Ratings ***/}
                     <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'} py={'3'}>
@@ -471,24 +457,45 @@ const AddRecipePage : React.FC = () => {
                                     {/*** TO DO ratingOptions.map((rating)=>(<></>)) ***/}
                                     <Flex gap={'2'} align={'center'}>
                                         <Text as="label" color="gray"> <Strong>Vibe</Strong></Text>
-                                    <Button>
+                                    <Button variant={'soft'}>
                                         <StarFilledIcon/>
                                     </Button>
-                                    <Button>
+                                    <Button variant={'soft'}>
                                         <StarFilledIcon/>
                                     </Button>
-                                    <Button>
+                                    <Button variant={'soft'}>
                                         <StarFilledIcon/>
                                     </Button>
-                                    <Button>
+                                    <Button variant={'soft'}>
                                         <StarIcon/>
                                     </Button>
-                                    <Button>
+                                    <Button variant={'soft'}>
                                         <StarIcon/>
                                     </Button>
                                     </Flex>
                                 </Flex>
                             </Card>
+                        </Flex>
+                    </Flex>
+                    {/*** SECTION actions ***/}
+                    <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'} py={'3'}>
+                        <Flex direction={'row'} justify={'start'} align={'start'} width={'100%'} gap={'2'}>
+                            <Button
+                                type={"submit"}
+                                onClick={(e)=> {
+                                    e.preventDefault();
+                                    console.log(newRecipe);
+                                    window.localStorage.setItem( newRecipe.title ,JSON.stringify(newRecipe) );
+                                    window.localStorage.setItem( 'recipeList', newRecipe.title );
+                                }}
+                            > 
+                                Save Locally 
+                            </Button>
+                            <Button
+                                variant={'soft'}
+                                onClick={()=> setNewRecipe(blankRecipe) }
+                            > 
+                                Clear Recipe </Button>
                         </Flex>
                     </Flex>
                 </Flex>
@@ -620,7 +627,8 @@ const AddRecipePage : React.FC = () => {
                     
                     </Box>
 
-                    <Button variant="solid" className="ds-u-margin--1" type={"submit"} onClick={(e)=> {
+                    <Button variant="solid" className="ds-u-margin--1" type={"submit"} 
+                        onClick={(e)=> {
                         e.preventDefault();
                         console.log(newRecipe);
                         window.localStorage.setItem( newRecipe.title ,JSON.stringify(newRecipe) );
