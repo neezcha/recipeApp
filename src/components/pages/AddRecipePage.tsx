@@ -8,7 +8,7 @@ import { json } from "stream/consumers";
 import RenderStep from "../Iterators/UpdateStepsObj";
 import isEqual from "lodash/isEqual";
 import { Card, Button, Box, Text, TextField, TextArea, Heading, Flex, Grid, Select, Separator, Strong, Checkbox } from '@radix-ui/themes'
-import { AmericanFluidUnitsEnum, AmericanWeightUnitsEnum, conversionAmericanFluidUnitsToLeter, DropDownSegment, InputSegment, miscUnits, MiscUnitsEnum, usFluidUnits, usWeightUnits } from "../../const";
+import { AmericanFluidUnitsEnum, AmericanWeightUnitsEnum, conversionAmericanFluidUnitsToLeter, DropDownSegment, InputSegment, miscUnits, MiscUnitsEnum, QUOTES, usFluidUnits, usWeightUnits } from "../../const";
 import { CheckCircledIcon, PlusCircledIcon, CrossCircledIcon, ThickArrowDownIcon, ThickArrowUpIcon, StarIcon, StarFilledIcon } from '@radix-ui/react-icons'
 
 /***
@@ -63,7 +63,7 @@ const AddRecipePage : React.FC = () => {
                 <Flex gap={'2'} direction={'column'}>
                     <Heading as="h2"> Add Recipe! </Heading>
                     <Text size={'2'} weight={'light'} color={'gray'}>
-                    All bread is made of wood, / cow dung, packed brown moss, / the bodies of dead animals, the teeth / and backbones, what is left / after the ravens. This dirt / flows through the stems into the grain, / into the arm, nine strokes / of the axe, skin from a tree, / good water which is the first / gift, four hours. //    / Live burial under a moist cloth, / a silver dish, the row / of white famine bellies / swollen and taut in the oven, / lungfuls of warm breath stopped / in the heat from an old sun. //   / Good bread has the salt taste / of your hands after nine / strokes of the axe, the salt / taste of your mouth, it smells / of its own small death, of the deaths / before and after. //   / Lift these ashes / into your mouth, your blood; / to know what you devour / is to consecrate it, / almost. All bread must be broken / so it can be shared. Together / we eat this earth. // - Margret Atwood
+                    {QUOTES.BREAD}
                     </Text>
                 </Flex>
                 <Flex width={'100%'} py={'5'}>

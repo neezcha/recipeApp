@@ -62,8 +62,7 @@ const RenderStep : React.FC<IUpdateStepObj>= ({step,recipe,setRecipe}) => {
                         autoFocus
                         size="2"
                         style={{width: '100%'}}
-                        value={crrStep.instruction} 
-                        placeholder={crrStep.instruction}
+                        defaultValue={crrStep.instruction}
                         onChange={(e)=>{
                             setCrrStep({...step, instruction: e.currentTarget.value});
                         }}
