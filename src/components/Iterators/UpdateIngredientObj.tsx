@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Recipe } from "../../types/recipe";
 import { Card, Flex, TextField, Text, Strong, Select, Button } from "@radix-ui/themes";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { miscUnits, usFluidUnits, usWeightUnits } from "../../const";
 
 /*************************************
  * Make each ingrediednt an interactive item 
@@ -19,8 +20,9 @@ interface IUpdateIngredientObj {
     ingredient : Ingredient;
     recipe: Recipe; 
     setRecipe: Dispatch<SetStateAction<Recipe>> ;
+    index: number; 
 }
-const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,setRecipe}) => {
+const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,setRecipe, index}) => {
     const [currentIngredient, setCurrentIngredient] = useState<Ingredient>(ingredient);
 
     // ingredients
@@ -32,13 +34,15 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
     const newIng = [...ingredients]
     // edit array in place with new values 
     useEffect(()=>{
-        newIng.splice(indexIngredient, 1, {amount: currentIngredient.amount, name: currentIngredient.name, unit:currentIngredient.unit})
-        setRecipe({...recipe, ingredients:newIng});
+        newIng.splice(indexIngredient, 1, {amount: currentIngredient.amount, name: currentIngredient.name, unit:currentIngredient.unit});
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[currentIngredient]);
+    useEffect(()=>{
+        setRecipe({...recipe, ingredients:newIng});
+    },[newIng]);
 
     return (
-        <Card style={{width: '100%'}} key={`ingredient-${ingredient.name}-${ingredient.amount}-${ingredient.unit}`}>
+        <Card style={{width: '100%'}}>
             <Flex as='span' justify="between" p={'2'}>
                 <Flex justify="start" gap="3" style={{width: '90%'}}>
                 <Flex direction={'column'} gap="2">
@@ -59,24 +63,38 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
                     <Flex direction={'column'} gap="2">
                         <Text as="label" color={'gray'}><Strong>Unit:</Strong></Text>
                         <Select.Root 
-                            defaultValue={currentIngredient.unit} 
-                            name="recipeIngredientUnitInputFeild">
-                            <Select.Trigger 
-                                onChange={(e)=>{
-                                    setCurrentIngredient({...currentIngredient, unit:e.currentTarget.value});
-                                }} 
-                            />
+                            value={currentIngredient.unit} 
+                            name="recipeIngredientUnitInputFeild"
+                            onValueChange={
+                                (e)=>{
+                                    setCurrentIngredient({...currentIngredient, unit:e});
+                            }}
+                            >
+                            <Select.Trigger />
                             <Select.Content>
-                                <Select.Group>
-                                    {/*** TO DO units.map((unit)=>(<Select.Item value={`unit-${unit}`}>{unit}</Select.Item>)) ***/}
-                                    <Select.Item value="unit" disabled>---</Select.Item>
-                                    <Select.Item value="cup">cup</Select.Item>
-                                    <Select.Item value="oz" >oz</Select.Item>
-                                    <Select.Item value="fl oz">fl oz</Select.Item>
-                                    <Select.Item value="tbs" >tbs</Select.Item>
-                                    <Select.Item value="tsp" >tsp</Select.Item>
-                                </Select.Group>
-                                <Select.Separator />
+                            <Select.Group>
+                                {usFluidUnits.map((unit) => {
+                                    return (
+                                        <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                    )
+                                })}
+                            </Select.Group>
+                            <Select.Separator />
+                            <Select.Group>
+                                {usWeightUnits.map((unit, index) => {
+                                    return (
+                                        <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                    )
+                                })}
+                            </Select.Group>
+                            <Select.Separator />
+                            <Select.Group>
+                                {miscUnits.map((unit, index) => {
+                                    return (
+                                        <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                    )
+                                })}
+                            </Select.Group>
                             </Select.Content>
                         </Select.Root>
                     </Flex>
@@ -99,6 +117,8 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
                         radius={'full'} 
                         size={'4'}
                         onClick={()=>{
+                            console.log(indexIngredient+" "+index);
+                            setCurrentIngredient({name:"",amount:0,unit:""});
                             newIng.splice(indexIngredient, 1);
                             setRecipe({...recipe, ingredients:newIng});
                         }}>

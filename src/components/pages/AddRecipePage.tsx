@@ -8,7 +8,7 @@ import { json } from "stream/consumers";
 import RenderStep from "../Iterators/UpdateStepsObj";
 import isEqual from "lodash/isEqual";
 import { Card, Button, Box, Text, TextField, TextArea, Heading, Flex, Grid, Select, Separator, Strong, Checkbox } from '@radix-ui/themes'
-import { DropDownSegment, InputSegment } from "../../const";
+import { AmericanFluidUnitsEnum, AmericanWeightUnitsEnum, conversionAmericanFluidUnitsToLeter, DropDownSegment, InputSegment, miscUnits, MiscUnitsEnum, usFluidUnits, usWeightUnits } from "../../const";
 import { CheckCircledIcon, PlusCircledIcon, CrossCircledIcon, ThickArrowDownIcon, ThickArrowUpIcon, StarIcon, StarFilledIcon } from '@radix-ui/react-icons'
 
 /***
@@ -53,6 +53,9 @@ const AddRecipePage : React.FC = () => {
             setNewRecipe({ ...newRecipe, steps:tempList})
         }
     }, [stepsList]);
+
+    const unitsOfMeasurments = useState(
+        [miscUnits, usFluidUnits, usWeightUnits]);
 
     return (
         <Flex id={'new-recipe-page'} as={"span"} m={'4'}>
@@ -105,73 +108,11 @@ const AddRecipePage : React.FC = () => {
                     <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'} py={'3'}>
                         <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'}>
                             <Heading as="h3"> Ingredients </Heading>
-                            {/************ ingredients.map((ingredient, index) => (<Card></Card>)) ***********/}
-                            {ingredientList.map((ingredient)=>{
-                                // console.log( JSON.stringify(ingredient) );
-                                // console.log( ingredient.amount+" "+ingredient.unit+" "+ingredient.name );
-                                // console.log( "<RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>" );
-
+                            {ingredientList.map((ingredient, index)=>{
                                 return (
-                                    <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/>
-                                    /***
-                                    <Card style={{width: '100%'}}>
-                                        <Flex as='span' justify="between" p={'2'}>
-                                            <Flex justify="start" gap="3" style={{width: '90%'}}>
-                                            <Flex direction={'column'} gap="2">
-                                                    <Text as="label" color={'gray'}><Strong>Quantity:</Strong></Text>
-                                                    <TextField.Root
-                                                        name="newRecipeIngredientsAmountInputFeild"
-                                                        autoFocus
-                                                        size="2"
-                                                        style={{width: '70px'}}
-                                                        pattern="[0-9]*"
-                                                        onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value), unit:"", name:""})} 
-                                                        value={ingredient.amount} 
-                                                        placeholder={ingredient.amount.toString()}
-                                                    />
-                                                </Flex>
-                                                <Flex direction={'column'} gap="2">
-                                                    <Text as="label" color={'gray'}><Strong>Unit:</Strong></Text>
-                                                    <Select.Root 
-                                                    defaultValue={ingredient.unit} 
-                                                    name="newRecipeIngredientUnitInputFeild" >
-                                                    <Select.Trigger onChange={(e)=>setnewIngredientUnit({...newIngredientUnit, amount:0, unit:e.currentTarget.value, name:""}) } 
-                                                    />
-                                                    <Select.Content>
-                                                        <Select.Group>
-                                                            {/*** TO DO units.map((unit)=>(<Select.Item value={`unit-${unit}`}>{unit}</Select.Item>)) ***
-                                                            <Select.Item value="unit" disabled>---</Select.Item>
-                                                            <Select.Item value="cup">cup</Select.Item>
-                                                            <Select.Item value="oz" >oz</Select.Item>
-                                                            <Select.Item value="fl oz">fl oz</Select.Item>
-                                                            <Select.Item value="tbs" >tbs</Select.Item>
-                                                            <Select.Item value="tsp" >tsp</Select.Item>
-                                                        </Select.Group>
-                                                        <Select.Separator />
-                                                    </Select.Content>
-                                                    </Select.Root>
-                                                </Flex>
-                                                <Flex direction={'column'} gap="2" style={{width: '100%'}}>
-                                                    <Text as="label" color={'gray'}><Strong>Ingredient:</Strong></Text>
-                                                    <TextField.Root
-                                                        name="newRecipeIngredientsNameInputFeild"
-                                                        onChange={(e)=>setnewIngredientName({...newIngredientName, amount:0, unit:"", name:e.currentTarget.value}) }
-                                                        value={ingredient.name} 
-                                                        placeholder={ingredient.name}
-                                                        style={{width: '100%'}}
-                                                    />
-                                                </Flex>
-                                            </Flex>
-                                            <Flex justify="end" align={'end'} gap="3" m={'3'} direction={'column'}>
-                                                {/*** TO DO ingredient.editing ? (<Button variant={'ghost'} radius={'full'} size={'4'}> <CrossCircledIcon style={{height:'30px'}}/> Delete </Button>): null ***
-                                                <Button variant={'ghost'} radius={'full'} size={'4'}>
-                                                    <CrossCircledIcon style={{height:'30px'}}/>
-                                                    {/*** TO DO ingredient.editing ? <CheckCircledIcon style={{height:'30px'}}/> : </Pencil2Icon style={{height:'30px'}}/> ***
-                                                </Button>
-                                            </Flex>
-                                        </Flex>
-                                    </Card>
-                                    ***/
+                                    <Flex id={`ingredient--${index}`} key={`ingredient--${index}`} width={'100%'}>
+                                        <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe} index={index}/>
+                                    </Flex>
                                 )
                             })}
                             <Card style={{width: '100%', background:'#BBF3FEF7'}}>
@@ -193,21 +134,53 @@ const AddRecipePage : React.FC = () => {
                                         <Flex direction={'column'} gap="2">
                                             <Text as="label"><Strong>Unit:</Strong></Text>
                                             <Select.Root 
-                                            defaultValue="unit" 
-                                            name="newRecipeIngredientUnitInputFeild" >
-                                            <Select.Trigger onChange={(e)=>setNewIngredient({...newIngredient, unit:e.currentTarget.value}) } 
-                                            />
-                                            <Select.Content >
+                                                defaultValue="unit" 
+                                                name="newRecipeIngredientUnitInputFeild" 
+                                                onValueChange={
+                                                    (e)=>{
+                                                        setNewIngredient({...newIngredient, unit:e});
+                                                }}
+                                            >
+                                                <Select.Trigger />
+                                            <Select.Content>
+                                                <Select.Item value="unit" disabled>---</Select.Item>
+                                                {/***unitsOfMeasurments.map((measurmentGroup) => {
+                                                    return (
+                                                        <div key={`${measurmentGroup}`} id={`${measurmentGroup}`}>
+                                                            <Select.Group>
+                                                                {/*** Property 'map' does not exist on type 'Dispatch<SetStateAction<{ value: string; label: string; }[][]>>' ***
+                                                                {measurmentGroup.map((unit) => {
+                                                                    return (
+                                                                        <Select.Item value={unit}>{unit}</Select.Item>
+                                                                    )
+                                                                })}
+                                                            </Select.Group>
+                                                            <Select.Separator />
+                                                         </div>)
+                                                }) ***/}
                                                 <Select.Group>
-                                                    {/*** TO DO units.map((unit)=>(<Select.Item value={`unit-${unit}`}>{unit}</Select.Item>)) ***/}
-                                                    <Select.Item value="unit" disabled>---</Select.Item>
-                                                    <Select.Item value="cup">cup</Select.Item>
-                                                    <Select.Item value="oz" >oz</Select.Item>
-                                                    <Select.Item value="fl oz">fl oz</Select.Item>
-                                                    <Select.Item value="tbs" >tbs</Select.Item>
-                                                    <Select.Item value="tsp" >tsp</Select.Item>
+                                                    {usFluidUnits.map((unit) => {
+                                                        return (
+                                                            <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                                        )
+                                                    })}
                                                 </Select.Group>
                                                 <Select.Separator />
+                                                <Select.Group>
+                                                    {usWeightUnits.map((unit, index) => {
+                                                        return (
+                                                            <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                                        )
+                                                    })}
+                                                </Select.Group>
+                                                <Select.Separator />
+                                                <Select.Group>
+                                                    {miscUnits.map((unit, index) => {
+                                                        return (
+                                                            <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                                        )
+                                                    })}
+                                                </Select.Group>
                                             </Select.Content>
                                             </Select.Root>
                                         </Flex>
@@ -244,40 +217,11 @@ const AddRecipePage : React.FC = () => {
                     <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'} py={'3'}>
                         <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'}>
                             <Heading as="h3"> Instructions </Heading>
-                            {stepsList.map((step)=> {
-                                // console.log(step.index+" "+step.instruction);
-                                // console.log("<RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe}/>");
-                            return (
-                                <Card style={{width: '100%'}}>
-                                <Flex as='span' justify="between" p={'2'}>
-                                    <Flex justify="start" gap="3">
-                                        {step.index}
-                                    </Flex>
-                                    <Flex justify="start" gap="3" style={{width: '90%'}}>
-                                        <TextArea
-                                            name="newRecipeIngredientsAmountInputFeild"
-                                            autoFocus
-                                            size="2"
-                                            style={{width: '100%'}}
-                                            value={step.instruction} 
-                                            placeholder={step.instruction}
-                                        />
-                                    </Flex>
-                                    <Flex justify="end" align={'end'} gap="3" m={'3'} direction={'row'}>
-                                        <Flex direction={'column'}>
-                                            <Button variant={'ghost'} radius={'full'} size={'4'}> 
-                                                <ThickArrowUpIcon /> 
-                                            </Button>
-                                            <Button variant={'ghost'} radius={'full'} size={'4'}> 
-                                                <ThickArrowDownIcon /> 
-                                            </Button>
-                                        </Flex>
-                                        <Button variant={'ghost'} radius={'full'} size={'4'}>
-                                            <CrossCircledIcon style={{height:'30px'}}/>
-                                        </Button>
-                                    </Flex>
+                            {stepsList.map((step, index)=> {return (
+                                <Flex id={`step--${index}`} key={`step--${index}`} width={'100%'}>
+                                    <RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe}/>
                                 </Flex>
-                            </Card>)
+                            )    
                         })}
                         <Card style={{width: '100%', background:'#BBF3FEF7'}}>
                             <Flex as='span' justify="between" p={'2'}>
@@ -365,147 +309,6 @@ const AddRecipePage : React.FC = () => {
                         </Flex>
                     </Flex>
                 </Flex>
-                {/******* OLD BELOW ********/}
-                <Grid p="5"  gap="3"> 
-                    <Box>
-                        <Text as="label"><Strong>RecipeTitle:</Strong></Text>
-                        <TextField.Root
-                                name="newRecipeTitleInputFeild"
-                                onChange={(e)=>setNewRecipe({ ...newRecipe, title:e.currentTarget.value})} 
-                                value={newRecipe.title}
-                                placeholder={"Enter Recipe Title"}
-                                />
-                    </Box>
-                    <Box>
-                    <Text as="label"><Strong>Recipe Description:</Strong></Text>
-                        <TextArea
-                                name="newRecipeDescInputFeild"
-                                onChange={(e)=>setNewRecipe({ ...newRecipe, description:e.currentTarget.value})} 
-                                value={newRecipe.description}
-                                placeholder={"Enter Recipe Description"}
-                                rows={3}
-                                />
-                    </Box>
-                    <Separator size="4"/>
-                    <Box >
-                        <Text as="label"><Strong>Recipe Ingredients</Strong></Text>
-                    <Box>
-                        <Card size="4">
-                            <Grid gap="3" align="center" columns="1">
-                                <Flex gap="3">
-                                    <Text as="label"><Strong>Ingredient Unit:</Strong></Text>
-                                    <Select.Root 
-                                        defaultValue="unit" 
-                                        name="newRecipeIngredientUnitInputFeild" >
-                                        <Select.Trigger onChange={(e)=>setnewIngredientUnit({...newIngredientUnit, amount:0, unit:e.currentTarget.value, name:""}) } 
-                                        />
-                                        <Select.Content >
-                                            <Select.Group>
-                                                <Select.Item value="unit" disabled>- Select a Unit of Measurment -</Select.Item>
-                                                <Select.Item value="cup">cup</Select.Item>
-                                                <Select.Item value="oz" >oz</Select.Item>
-                                                <Select.Item value="fl oz">fl oz</Select.Item>
-                                                <Select.Item value="tbs" >tbs</Select.Item>
-                                                <Select.Item value="tsp" >tsp</Select.Item>
-                                            </Select.Group>
-                                            <Select.Separator />
-                                        </Select.Content>
-                                        </Select.Root>
-                                </Flex>
-                                <Box>    
-                                        <Text as="label"><Strong>Amount of Ingredient:</Strong></Text>
-                                        <TextField.Root
-                                            name="newRecipeIngredientsAmountInputFeild"
-                                            autoFocus
-                                            size="1"
-                                            pattern="[0-9]*"
-                                            onChange={(e)=>setNewIngredient({...newIngredient, amount:Number(e.currentTarget.value), unit:"", name:""})} 
-                                            value={newIngredient.amount} 
-                                            placeholder="Enter Amount of Ingredient"
-                                        />
-                                </Box>
-                                <Box>   
-                                        <Text as="label"><Strong>Ingredient:</Strong></Text>
-                                        <TextField.Root
-                                            name="newRecipeIngredientsNameInputFeild"
-                                            onChange={(e)=>setnewIngredientName({...newIngredientName, amount:0, unit:"", name:e.currentTarget.value}) }
-                                            value={newIngredientName.name} 
-                                            placeholder="Enter Ingredient Name"
-                                        />
-                                </Box>
-                            </Grid>
-                        </Card>
-                    </Box>
-                    <div> 
-                        <Button
-                            className="ds-u-margin-right--2 ds-u-padding-y--2"
-                            onClick={(e)=>setNewRecipe({ ...newRecipe, 
-                                ingredients:[...newRecipe.ingredients, {amount: Number(newIngredient?.amount), unit:newIngredientUnit.unit, name:newIngredientName?.name}] 
-                            }) }
-                        >➕
-                        </Button> 
-                        <Text> { "Summary: "} {newIngredient.amount} {", "} {newIngredientUnit.unit} {", "} {newIngredientName.name} </Text>
-                    </div>
-                    </Box>
-
-                    <Box>
-                    <Text as="label"><Strong>Ingredients</Strong></Text>
-                    {ingredientList.map((ingredient)=>{
-                        // console.log( JSON.stringify(ingredient))
-                        return <div key={ingredient.amount+" "+ingredient.unit+" "+ingredient.name}>
-                        {/* <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe}/> */}
-                        
-                        </div>
-                    })}
-                    </Box>
-                    <Separator size="4"/>
-                    <Box>
-                        <label className="b"> Steps: </label>
-                        {/* <input type={"number"} min="0" max="1" onChange={(e)=>setNewStepIndex({...newStepIndex, index:Number(e.currentTarget.value) })} placeholder="Index"/>  */}
-                        {/* <input onChange={(e)=>setNewStepInstruction({...newStepInstruction, instruction:(e.currentTarget.value)} )} placeholder={"Step"} />*/}
-                        {/* <button type="button" onClick={(e)=>setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: Number(newStepIndex?.index), instruction:newStepInstruction.instruction}] }) }> Add Step</button>*/}
-                    </Box>
-                    <Box>
-                        {stepsList.map((step)=> {
-                            return <div key={step.index+" "+step.instruction}>
-                                <RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe}/>
-                            </div>
-                        })}
-                    </Box>
-                    <Box>
-                    <Text as="label"><Strong>New Step:</Strong></Text>
-                    <TextField.Root
-                                name="newStepInputFeild"
-                                onClick={(e)=> {
-                                    const newStepIndexVar = stepsList.length??0
-                                    setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepDesc??""}] })
-                                } }
-                                placeholder="Enter New Step Instructions"
-                            
-                        />
-                        <Button className="ds-u-margin--1 ds-u-padding-y--2" 
-                            onClick={(e)=> {
-                            const newStepIndexVar = stepsList.length??0
-                            setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepDesc??""}] })
-                        } }> ➕</Button>
-                    
-                    </Box>
-
-                    <Button variant="solid" className="ds-u-margin--1" type={"submit"} 
-                        onClick={(e)=> {
-                        e.preventDefault();
-                        // console.log(newRecipe);
-                        window.localStorage.setItem( newRecipe.title ,JSON.stringify(newRecipe) );
-                        window.localStorage.setItem( 'recipeList', newRecipe.title );
-
-                        } 
-                        }>
-                        Save to Local Storage
-                    </Button>
-
-                    <Button className="ds-u-margin--1" type="button" onClick={()=> setNewRecipe(blankRecipe) }> Reset Recipe </Button>
-                    {/*<button type="button" onClick={()=>{<UpdateIngredient ingredients={newRecipe.ingredients} />} }> Show Ingredeints</button>*/}
-                </Grid>
             </Flex>
         </Flex>
     );
