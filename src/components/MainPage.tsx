@@ -22,7 +22,7 @@ const MainPage : React.FC = () => {
         description:"",
         ingredients:[
             milk,
-            {amount:1, unit:"cup", name:"Cereal" } // inline object creation
+            {amount:1, unit:"cup", name:"Cereal"} // inline object creation
         ],
         steps:[
             {index:1, instruction:"Gather ingredients."},

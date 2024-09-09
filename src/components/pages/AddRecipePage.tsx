@@ -9,7 +9,8 @@ import RenderStep from "../Iterators/UpdateStepsObj";
 import isEqual from "lodash/isEqual";
 import { Card, Button, Box, Text, TextField, TextArea, Heading, Flex, Grid, Select, Separator, Strong, Checkbox } from '@radix-ui/themes'
 import { AmericanFluidUnitsEnum, AmericanWeightUnitsEnum, conversionAmericanFluidUnitsToLeter, DropDownSegment, InputSegment, miscUnits, MiscUnitsEnum, QUOTES, usFluidUnits, usWeightUnits } from "../../const";
-import { CheckCircledIcon, PlusCircledIcon, CrossCircledIcon, ThickArrowDownIcon, ThickArrowUpIcon, StarIcon, StarFilledIcon } from '@radix-ui/react-icons'
+import { CheckCircledIcon, PlusCircledIcon, CrossCircledIcon, ThickArrowDownIcon, ThickArrowUpIcon, StarIcon, StarFilledIcon, CursorTextIcon } from '@radix-ui/react-icons'
+import { UniqueKeyIngredient } from "../../types/uniqueKeys";
 
 /***
  * TO DO: update to EditRecipePage (empty recipe means new recipe) 
@@ -23,39 +24,45 @@ const AddRecipePage : React.FC = () => {
         title : "",
         description: "",
         ingredients: [],
-        steps: []}
+        steps: []
+    };
     const blankIngredient : Ingredient = {
         amount: 0,
-        unit: "",
-        name: ""}
+        unit: "unit",
+        name: ""
+    };
     const blankStep : Step = {
         index : 0,
-        instruction : "" }
+        instruction : "" 
+    };
     
-    const [newRecipe, setNewRecipe] = useState<Recipe>(blankRecipe); //useState is a hook 
-
+    const [newRecipe, setNewRecipe] = useState<Recipe>(blankRecipe); 
     const [newIngredient, setNewIngredient] = useState<Ingredient>(blankIngredient);
-    const [newIngredientUnit, setnewIngredientUnit] = useState<Ingredient>(blankIngredient);
-    const [newIngredientName, setnewIngredientName] = useState<Ingredient>(blankIngredient);
+    const [newStep, setNewStep] = useState<Step>(blankStep);
 
-    const [newStepDesc, setNewStepDesc] = useState<string>();
     // inferred state
-    const ingredientList = newRecipe.ingredients;
-    const stepsList = newRecipe.steps;
+    const crrIngredientList = [...newRecipe.ingredients];
+    const [ingredientList, setIngredientList] = useState([...crrIngredientList]);
+    const currStepsList = [...newRecipe.steps];
+    const [stepList, setStepList] = useState(currStepsList);
+    
     // sort step list
     useEffect(()=>{
-        const tempList = [...stepsList]
-        tempList.sort((a,b)=>{
+        const tempList = [...stepList]
+        tempList.sort((a,b)=>{            
             return a.index - b.index
         })
 
-        if(!isEqual(tempList, stepsList)){
+        if(!isEqual(tempList, stepList)){
             setNewRecipe({ ...newRecipe, steps:tempList})
         }
-    }, [stepsList]);
+    }, [stepList]);
 
-    const unitsOfMeasurments = useState(
-        [miscUnits, usFluidUnits, usWeightUnits]);
+    // update display components 
+    useEffect(()=>{
+        setStepList([...newRecipe.steps]);
+        setIngredientList([...newRecipe.ingredients]);
+    },[newRecipe]);
 
     return (
         <Flex id={'new-recipe-page'} as={"span"} m={'4'}>
@@ -110,12 +117,11 @@ const AddRecipePage : React.FC = () => {
                             <Heading as="h3"> Ingredients </Heading>
                             {ingredientList.map((ingredient, index)=>{
                                 return (
-                                    <Flex id={`ingredient--${index}`} key={`ingredient--${index}`} width={'100%'}>
-                                        <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe} index={index}/>
-                                    </Flex>
+                                    <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe} index={index} key={`${index}-${ingredient.name}`}/>
                                 )
                             })}
                             <Card style={{width: '100%', background:'#BBF3FEF7'}}>
+                                {/*** TO DO: refactor RenderIngredient to accomidate for new item ***/}
                                 <Flex as='span' justify="between" p={'2'}>
                                     <Flex justify="start" gap="3" style={{width: '90%'}}>
                                         <Flex direction={'column'} gap="2">
@@ -136,6 +142,7 @@ const AddRecipePage : React.FC = () => {
                                             <Select.Root 
                                                 defaultValue="unit" 
                                                 name="newRecipeIngredientUnitInputFeild" 
+                                                value={newIngredient.unit}
                                                 onValueChange={
                                                     (e)=>{
                                                         setNewIngredient({...newIngredient, unit:e});
@@ -144,24 +151,10 @@ const AddRecipePage : React.FC = () => {
                                                 <Select.Trigger />
                                             <Select.Content>
                                                 <Select.Item value="unit" disabled>---</Select.Item>
-                                                {/***unitsOfMeasurments.map((measurmentGroup) => {
-                                                    return (
-                                                        <div key={`${measurmentGroup}`} id={`${measurmentGroup}`}>
-                                                            <Select.Group>
-                                                                {/*** Property 'map' does not exist on type 'Dispatch<SetStateAction<{ value: string; label: string; }[][]>>' ***
-                                                                {measurmentGroup.map((unit) => {
-                                                                    return (
-                                                                        <Select.Item value={unit}>{unit}</Select.Item>
-                                                                    )
-                                                                })}
-                                                            </Select.Group>
-                                                            <Select.Separator />
-                                                         </div>)
-                                                }) ***/}
                                                 <Select.Group>
                                                     {usFluidUnits.map((unit) => {
                                                         return (
-                                                            <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                                            <Select.Item value={`${unit.value}`} key={`unit-${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
                                                         )
                                                     })}
                                                 </Select.Group>
@@ -169,7 +162,7 @@ const AddRecipePage : React.FC = () => {
                                                 <Select.Group>
                                                     {usWeightUnits.map((unit, index) => {
                                                         return (
-                                                            <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                                            <Select.Item value={`${unit.value}`} key={`unit-${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
                                                         )
                                                     })}
                                                 </Select.Group>
@@ -177,7 +170,7 @@ const AddRecipePage : React.FC = () => {
                                                 <Select.Group>
                                                     {miscUnits.map((unit, index) => {
                                                         return (
-                                                            <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                                            <Select.Item value={`${unit.value}`} key={`unit-${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
                                                         )
                                                     })}
                                                 </Select.Group>
@@ -201,7 +194,6 @@ const AddRecipePage : React.FC = () => {
                                             radius={'full'} 
                                             size={'4'}
                                             onClick={()=>{
-                                                /** TO DO ingredients validation **/
                                                 setNewRecipe({...newRecipe, ingredients: [...newRecipe.ingredients, newIngredient]});
                                                 setNewIngredient(blankIngredient);
                                             }}
@@ -217,16 +209,16 @@ const AddRecipePage : React.FC = () => {
                     <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'} py={'3'}>
                         <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'}>
                             <Heading as="h3"> Instructions </Heading>
-                            {stepsList.map((step, index)=> {return (
-                                <Flex id={`step--${index}`} key={`step--${index}`} width={'100%'}>
-                                    <RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe}/>
-                                </Flex>
+                            {stepList.map((step, index)=> {return (
+                                 <RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe} key={`${step.instruction}`}/>
+                       
                             )    
                         })}
                         <Card style={{width: '100%', background:'#BBF3FEF7'}}>
+                            {/*** TO DO refactor RenderStep to handle new step ***/}
                             <Flex as='span' justify="between" p={'2'}>
                                 <Flex justify="start" gap="3">
-                                    {stepsList.length}
+                                    {stepList.length}
                                 </Flex>
                                 <Flex justify="start" gap="3" style={{width: '90%'}}>
                                     <TextArea
@@ -234,8 +226,8 @@ const AddRecipePage : React.FC = () => {
                                         autoFocus
                                         size="2"
                                         style={{width: '100%'}}
-                                        onChange={(e)=>setNewStepDesc(e.currentTarget.value)}
-                                        value={newStepDesc}
+                                        onChange={(e)=>setNewStep({...newStep, instruction: e.currentTarget.value})}
+                                        value={newStep.instruction}
                                         placeholder="Enter New Step Instructions"
                                     />
                                 </Flex>
@@ -246,9 +238,9 @@ const AddRecipePage : React.FC = () => {
                                         size={'4'} 
                                         onClick={(e)=> {
                                             /** TO DO steps validation **/
-                                            const newStepIndexVar = stepsList.length??0;
-                                            setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStepDesc??""}] });
-                                            setNewStepDesc("");
+                                            const newStepIndexVar = stepList.length??0;
+                                            setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStep.instruction??""}] });
+                                            setNewStep({...newStep, instruction:""});
                                         }}
                                     >
                                         <CheckCircledIcon style={{height:'30px'}}/>

@@ -16,13 +16,13 @@ import { miscUnits, usFluidUnits, usWeightUnits } from "../../const";
  * @param setRecipe fn to update current recipe
  *************************************/
 
-interface IUpdateIngredientObj {
+interface IRenderIngredientObj {
     ingredient : Ingredient;
     recipe: Recipe; 
     setRecipe: Dispatch<SetStateAction<Recipe>> ;
     index: number; 
 }
-const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,setRecipe, index}) => {
+const RenderIngredient : React.FC<IRenderIngredientObj>= ({ingredient,recipe,setRecipe, index}) => {
     const [currentIngredient, setCurrentIngredient] = useState<Ingredient>(ingredient);
 
     // ingredients
@@ -31,15 +31,15 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
     const indexIngredient = ingredients.indexOf(ingredient)
 
     // spread ingridents into an editable array
-    const newIng = [...ingredients]
+    const newIngList = [...ingredients]
     // edit array in place with new values 
     useEffect(()=>{
-        newIng.splice(indexIngredient, 1, {amount: currentIngredient.amount, name: currentIngredient.name, unit:currentIngredient.unit});
+        newIngList.splice(indexIngredient, 1, {amount: currentIngredient.amount, name: currentIngredient.name, unit:currentIngredient.unit});
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[currentIngredient]);
     useEffect(()=>{
-        setRecipe({...recipe, ingredients:newIng});
-    },[newIng]);
+        setRecipe({...recipe, ingredients:newIngList});
+    },[newIngList]);
 
     return (
         <Card style={{width: '100%'}}>
@@ -75,7 +75,7 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
                             <Select.Group>
                                 {usFluidUnits.map((unit) => {
                                     return (
-                                        <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                        <Select.Item value={`${unit.value}`} key={`unit-${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
                                     )
                                 })}
                             </Select.Group>
@@ -83,7 +83,7 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
                             <Select.Group>
                                 {usWeightUnits.map((unit, index) => {
                                     return (
-                                        <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                        <Select.Item value={`${unit.value}`} key={`unit-${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
                                     )
                                 })}
                             </Select.Group>
@@ -91,7 +91,7 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
                             <Select.Group>
                                 {miscUnits.map((unit, index) => {
                                     return (
-                                        <Select.Item value={`${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
+                                        <Select.Item value={`${unit.value}`} key={`unit-${unit.value}`}>{unit.label.toLowerCase()}</Select.Item>
                                     )
                                 })}
                             </Select.Group>
@@ -117,10 +117,10 @@ const RenderIngredient : React.FC<IUpdateIngredientObj>= ({ingredient,recipe,set
                         radius={'full'} 
                         size={'4'}
                         onClick={()=>{
-                            console.log(indexIngredient+" "+index);
-                            setCurrentIngredient({name:"",amount:0,unit:""});
-                            newIng.splice(indexIngredient, 1);
-                            setRecipe({...recipe, ingredients:newIng});
+                            console.log("delete"+indexIngredient+" "+index);
+                            // setCurrentIngredient({name:"",amount:0,unit:""});
+                            newIngList.splice(indexIngredient, 1);
+                            setRecipe({...recipe, ingredients:newIngList});
                         }}>
                         <CrossCircledIcon style={{height:'30px'}}/>
                     </Button>

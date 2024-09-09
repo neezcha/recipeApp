@@ -33,6 +33,18 @@ const RenderStep : React.FC<IUpdateStepObj>= ({step,recipe,setRecipe}) => {
         setRecipe({...recipe, steps:newStep});
     },[newStep]);
 
+    const indexDown = () => {
+        let idx = crrStep.index;
+        if(idx!==newStep.length-1){
+            setCrrStep({...step, index: Number(idx+1)});
+        }  
+    };
+    const indexUp = () => {
+        let idx = crrStep.index;
+        if(idx!==0){
+            setCrrStep({...step, index: Number(idx-1)});
+        }  
+    };
 
     /***
     const [indexVal, setIndexVal] = useState<Step["index"]>(step.index);
@@ -74,10 +86,6 @@ const RenderStep : React.FC<IUpdateStepObj>= ({step,recipe,setRecipe}) => {
                             variant={'ghost'} 
                             radius={'full'} 
                             size={'4'}
-                            onClick={(e)=> {
-                                e.preventDefault();
-                                setCrrStep({...step, index: Number(crrStep.index-1)});
-                            }}
                         > 
                             <ThickArrowUpIcon /> 
                         </Button>
@@ -85,15 +93,21 @@ const RenderStep : React.FC<IUpdateStepObj>= ({step,recipe,setRecipe}) => {
                             variant={'ghost'} 
                             radius={'full'} 
                             size={'4'}
-                            onClick={(e)=> {
-                                e.preventDefault();
-                                setCrrStep({...step, index: Number(crrStep.index+1)});
-                            }}
                         > 
                             <ThickArrowDownIcon /> 
                         </Button>
                     </Flex>
-                    <Button variant={'ghost'} radius={'full'} size={'4'}>
+                    <Button 
+                        variant={'ghost'} 
+                        radius={'full'} 
+                        size={'4'}
+                        onClick={()=>{
+                            console.log("delete"+indexStep+" "+step);
+                            setCrrStep({index:0,instruction:""});
+                            newStep.splice(indexStep, 1);
+                            setRecipe({...recipe, steps:newStep});
+                        }}
+                    >
                         <CrossCircledIcon style={{height:'30px'}}/>
                     </Button>
                 </Flex>

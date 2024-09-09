@@ -59,6 +59,7 @@ export enum MetricUnitsEnum {
 export const metricUnits = Object.keys(AmericanFluidUnitsEnum);
 
 export const miscUnits = [
+    {value: "COUNT", label: "count"},
     {value: "LARGE", label: "LG"},
     {value: "MEDIUM", label: "MD"},
     {value: "SMALL", label: "SM"},
@@ -123,4 +124,7 @@ export interface DropDownSegment extends CommonProps {
 /*** QUOTE TEXT ***/
 export const QUOTES = {
     "BREAD" : "All bread is made of wood, / cow dung, packed brown moss, / the bodies of dead animals, the teeth / and backbones, what is left / after the ravens. This dirt / flows through the stems into the grain, / into the arm, nine strokes / of the axe, skin from a tree, / good water which is the first / gift, four hours. //    / Live burial under a moist cloth, / a silver dish, the row / of white famine bellies / swollen and taut in the oven, / lungfuls of warm breath stopped / in the heat from an old sun. //   / Good bread has the salt taste / of your hands after nine / strokes of the axe, the salt / taste of your mouth, it smells / of its own small death, of the deaths / before and after. //   / Lift these ashes / into your mouth, your blood; / to know what you devour / is to consecrate it, / almost. All bread must be broken / so it can be shared. Together / we eat this earth. // - Margret Atwood",
+    "WELL" : "One cannot think well, love well, sleep well, if one has not dined well. — Virginia Woolf",
+    "BALANCED" : "Food is an important part of a balanced diet. — Fran Lebowitz",
+    "HUNGER" : "The best seasoning for food is hunger; for drink, thirst. — Socrates",
 }
