@@ -22,7 +22,7 @@ const MainPage : React.FC = () => {
         description:"",
         ingredients:[
             milk,
-            {amount:1, unit:"cup", name:"Cereal" } // inline object creation
+            {amount:1, unit:"cup", name:"Cereal"} // inline object creation
         ],
         steps:[
             {index:1, instruction:"Gather ingredients."},
@@ -31,17 +31,16 @@ const MainPage : React.FC = () => {
             {index:4, instruction:"Pour Milk into bowl."}
         ] 
     };
-    const whateves = ()=>console.log("test text");
     const recipes :Recipe[] = [cereal, {...cereal, title: "Complex Cereal"}];
 
     /*********** END TO DO  *********************************************/
 
-    const [destination,setDestination] = useState<string>("");
+    const [destination,setDestination] = useState<string>(navMenuItemArray[0].dest);
     
    return <>
         <NavMenu setDestination={setDestination}/>
         <Separator orientation="horizontal" size="4" color="cyan" />
-        <Flex as="div" p="3">
+        <Flex as="div" p="5" width={"100%"}>
             <UseDestionation destination={destination} menuArr={navMenuItemArray}/>
         </Flex>
    </>

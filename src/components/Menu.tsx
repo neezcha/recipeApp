@@ -1,7 +1,5 @@
-import React, { Dispatch, EventHandler, MouseEventHandler, SetStateAction, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction} from "react"
 import { menuItem } from "../types/menuItem"
-import UseDestionation from "./Navigation/UseDest"
-import AllRecipiesPage from "./pages/AllRecipiesPage"
 import { Button, Checkbox, Heading, Flex, Separator, Switch } from '@radix-ui/themes'
 
 interface IMenu{
@@ -26,39 +24,24 @@ interface INavMenuProps {
     setDestination: Dispatch<SetStateAction<string>>,
 }
 
-const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {
-const allRecipies : menuItem = {
-    title : "All Recipies",
-    dest : "AllRecipiesPage"
-}
-const addRecipies : menuItem = {
-    title : "Add a Recipe",
-    dest : "AddRecipePage"
-}
-const mealPrep : menuItem = {
-    title : "Meal Prep",
-    dest : "MealPrepPage"
-}
-const menuItemsArr :menuItem[] = [allRecipies, addRecipies, mealPrep];
-    
+const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {    
     return <>
         <div id="navMENU">
-            <Flex as="span" align="center" justify="between" gap="4" px="3">
+            <Flex as="span" align="center" justify="between" gap="4" p="3">
                 <Flex justify="start" gap="3">
-                    <Heading as="h1" color="cyan">The Menu </Heading>
+                    <Heading as="h1" color={'cyan'}>The Menu </Heading>
                 </Flex>
                 <Flex justify="center" gap="3">
-                    {menuItemsArr.map(element =>{
-                        return<>
+                    {navMenuItemArray.map(element =>{
+                        return(
                         <Button 
-                            className="pointer mr4" 
-                            color="cyan"
+                            className="pointer mr4"
                             variant="surface"
                             onClick={()=> setDestination(element.dest)} 
-                            key={element.title}>
+                            key={element.dest}>
                         {element.title} 
                         </Button>
-                    </>})}
+                    )})}
                 </Flex>
                 <Flex justify="end" gap="3"> 
                     <Checkbox defaultChecked />
