@@ -5,10 +5,11 @@ import{ Step } from "./step"
  export type Recipe = {
     title : string;
     description: string; 
+    ingredients: Ingredient[] ;
+    steps: Step [];
     cost?: Rating;
     health?: Rating;
     skill?: Rating; 
     portion?: Rating; 
-    ingredients: Ingredient[] ;
-    steps: Step [];
+    freezable?: Rating; 
 } 
