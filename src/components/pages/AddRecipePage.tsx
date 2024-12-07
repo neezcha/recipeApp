@@ -288,7 +288,7 @@ const AddRecipePage : React.FC = () => {
                                     e.preventDefault();
                                     console.log(newRecipe);
                                     window.localStorage.setItem( newRecipe.title ,JSON.stringify(newRecipe) );
-                                    window.localStorage.setItem( 'recipeList', newRecipe.title );
+                                    // window.localStorage.setItem( 'recipeList', newRecipe.title );
                                 }}
                             > 
                                 Save Locally 

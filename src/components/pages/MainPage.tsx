@@ -4,7 +4,7 @@ import { Unit } from "../../types/unit";
 import { Console } from "console";
 import RecipeItem from "../RecipeItem";
 import NavMenu, { navMenuItemArray } from "../Navigation/Menu";
-import { Flex, Separator } from "@radix-ui/themes";
+import { Box, Flex, Separator } from "@radix-ui/themes";
 import UseDestionation from "../Navigation/UseDest";
 import { useState } from "react";
 
@@ -40,9 +40,9 @@ const MainPage : React.FC = () => {
    return <>
         <NavMenu setDestination={setDestination}/>
         <Separator orientation="horizontal" size="4" color="cyan" />
-        <Flex as="span" p="5">
+        <Box p="5" width={'100%'}>
             <UseDestionation destination={destination} menuArr={navMenuItemArray}/>
-        </Flex>
+        </Box>
    </>
 
 }

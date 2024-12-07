@@ -17,33 +17,42 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe}) => {
     const ingArr : Ingredient[] = recipeJson.ingredients;
     const stepArr : Step [] = recipeJson.steps;
 
-    console.log(typeof ingArr);
-    console.log(ingArr);
+    const title = recipeJson.title === "" ? "No Title" : recipeJson.title
 
     return(
         <Card style={{width:'100%', backgroundColor: 'var(--gray-5)'}}>
             <Flex direction="column" justify="between" p={'2'}>
-                <Flex justify="start" gap="3" direction={'column'}>
-                        <Heading as="h3" size="4">{recipeJson.title}</Heading>
-                        <Text color="gray">{recipeJson.description}</Text>
+                <Flex justify="start" gap="1" direction={'column'}>
+                        <Heading as="h3" size="4">{title}</Heading>
+                        <Text size='2' color="gray">{recipeJson.description}</Text>
                 </Flex>
                 <Separator style={{width: '100%', marginBottom:'1rem', marginTop:'1rem'}}/>
                 <Flex justify="start" gap="3" direction={'column'} pl={'4'}>
-                    {ingArr?.map(({ amount, unit, name })=>{
-                        return(<div  key={amount+unit+name}>
-                            <Text key={recipeJson.title+amount+unit} color={"gray"} style={{paddingRight: '1.5rem'}}><Strong>{amount}{unit}</Strong></Text>
-                            <Text key={recipeJson.title+name}>{name}</Text>
-                        </div>)
-                    })}
+                    {ingArr.length > 0 ?
+                        ingArr?.map(({ amount, unit, name })=>{
+                            return(<div  key={amount+unit+name}>
+                                <Text key={title+amount+unit} color={"gray"} style={{paddingRight: '1.5rem'}}><Strong>{amount}{" "}{unit}</Strong></Text>
+                                <Text key={title+name}>{name}</Text>
+                            </div>)
+                        })
+                     : <Text color={'gray'}> 
+                            No Ingredients
+                        </Text>
+                    }
                 </Flex>
                 <Separator style={{width: '100%', marginBottom:'1rem', marginTop:'1rem'}}/>
                 <Flex justify="start" gap="3" direction={'column'} pl={'4'}>
-                    {stepArr?.map(({ index, instruction })=>{
-                        return(<div  key={instruction+index}>
-                            <Text key={recipeJson.title+index} color={"gray"} style={{paddingRight: '1.5rem'}}><Strong>{index}</Strong></Text>
-                            <Text key={recipeJson.title+instruction}>{instruction}</Text>
-                        </div>)
-                    })}
+                {stepArr.length > 0 ?
+                        stepArr?.map(({ index, instruction })=>{
+                            return(<div  key={instruction+index}>
+                                <Text key={title+index} color={"gray"} style={{paddingRight: '1.5rem'}}><Strong>{index}</Strong></Text>
+                                <Text key={title+instruction}>{instruction}</Text>
+                            </div>)
+                        })
+                     : <Text color={'gray'}> 
+                            No Instructions
+                        </Text>
+                    }
                 </Flex>
                 
             </Flex>  

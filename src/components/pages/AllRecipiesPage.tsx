@@ -21,10 +21,11 @@ const AllRecipiesPage : React.FC = () => {
         
     };
     let gotLocal = getLocal();
+    let localLen = gotLocal.length > 0 ;
 
 
     return (
-        <Flex id={'new-recipe-page'} as={"span"} m={'4'}>
+        <Box id={'new-recipe-page'} m={'4'}>
             <Flex direction={'column'} justify={'start'} align={'start'}>
                 <Flex gap={'2'} direction={'column'}>
                     <Heading as="h2"> Add Recipe! </Heading>
@@ -36,13 +37,20 @@ const AllRecipiesPage : React.FC = () => {
                     <Separator style={{width: '100%'}}/>
                 </Flex>
                 <Flex direction={'column'} justify={'start'} align={'start'} gap={'4'}>
-                    {gotLocal.map((recipeString)=>{
-                        return(
-                        <RenderRecipe recipe={recipeString} key={recipeString}/>);
-                    })}
+                    {gotLocal.length > 0 ? 
+                        gotLocal.map((recipeString)=>{
+                            return(
+                            <RenderRecipe recipe={recipeString} key={recipeString}/>);
+                        })
+                    : <Box px={'5'}>
+                        <Text size={'4'} weight={'bold'} color={'gray'}>
+                            No Recipies... yet
+                        </Text>
+                      </Box>
+                    }
                 </Flex>
             </Flex>
-        </Flex>    
+        </Box>    
     ); 
 }
 
