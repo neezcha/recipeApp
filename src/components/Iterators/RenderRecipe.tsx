@@ -1,4 +1,4 @@
-import { Card, Flex, Text, Strong, Heading, Separator } from "@radix-ui/themes";
+import { Card, Flex, Text, Strong, Heading, Separator, Box } from "@radix-ui/themes";
 import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from "react";
 import { Step } from "../../types/step";
 import { Ingredient } from "../../types/ingredient";

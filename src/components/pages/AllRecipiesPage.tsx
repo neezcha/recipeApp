@@ -21,7 +21,6 @@ const AllRecipiesPage : React.FC = () => {
         
     };
     let gotLocal = getLocal();
-    let localLen = gotLocal.length > 0 ;
 
 
     return (
@@ -36,7 +35,7 @@ const AllRecipiesPage : React.FC = () => {
                 <Flex width={'100%'} py={'5'}>
                     <Separator style={{width: '100%'}}/>
                 </Flex>
-                <Flex direction={'column'} justify={'start'} align={'start'} gap={'4'}>
+                <Flex direction={'column'} justify={'start'} align={'start'} gap={'4'} width={'100%'}>
                     {gotLocal.length > 0 ? 
                         gotLocal.map((recipeString)=>{
                             return(
