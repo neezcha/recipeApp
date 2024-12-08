@@ -27,7 +27,7 @@ const AllRecipiesPage : React.FC = () => {
         <Box id={'new-recipe-page'} m={'4'}>
             <Flex direction={'column'} justify={'start'} align={'start'}>
                 <Flex gap={'2'} direction={'column'}>
-                    <Heading as="h2"> Add Recipe! </Heading>
+                    <Heading as="h2"> All Recipes </Heading>
                     <Text size={'2'} weight={'light'} color={'gray'}>
                     {QUOTES.BALANCED}
                     </Text>
