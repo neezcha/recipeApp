@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction} from "react"
-import { menuItem } from "../types/menuItem"
+import { menuItem } from "../../types/menuItem"
 import { Button, Checkbox, Heading, Flex, Separator, Switch } from '@radix-ui/themes'
 
 interface IMenu{
