@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { QUOTES } from "../../const";
-import { Recipe } from "../../types/recipe";
-import {Box, Card, Heading, Text, TextField, Strong, Flex, Separator} from '@radix-ui/themes';
+import {Box, Heading, Text, Flex, Separator} from '@radix-ui/themes';
 import RenderRecipe from "../Iterators/RenderRecipe";
-
-interface IAllRecipiesPage {
-}
 
 const AllRecipiesPage : React.FC = () => {
 
