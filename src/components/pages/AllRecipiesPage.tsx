@@ -20,14 +20,17 @@ const AllRecipiesPage : React.FC = () => {
         return values;
         
     };
-    let gotLocal = getLocal();
+    const [gotLocal, setGotLocal] = useState(getLocal());
+    useEffect(()=>{
+        setGotLocal(getLocal());
+    },[gotLocal]);
 
 
     return (
         <Box id={'new-recipe-page'} m={'4'}>
             <Flex direction={'column'} justify={'start'} align={'start'}>
                 <Flex gap={'2'} direction={'column'}>
-                    <Heading as="h2"> Add Recipe! </Heading>
+                    <Heading as="h2"> All Recipes </Heading>
                     <Text size={'2'} weight={'light'} color={'gray'}>
                     {QUOTES.BALANCED}
                     </Text>
@@ -39,7 +42,7 @@ const AllRecipiesPage : React.FC = () => {
                     {gotLocal.length > 0 ? 
                         gotLocal.map((recipeString)=>{
                             return(
-                            <RenderRecipe recipe={recipeString} key={recipeString}/>);
+                            <RenderRecipe recipe={recipeString} key={recipeString} onDelete={(title : string)=>localStorage.removeItem(title)}/>);
                         })
                     : <Box px={'5'}>
                         <Text size={'4'} weight={'bold'} color={'gray'}>

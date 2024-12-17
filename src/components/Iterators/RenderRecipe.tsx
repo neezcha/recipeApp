@@ -1,7 +1,8 @@
-import { Card, Flex, Text, Strong, Heading, Separator, Box, Grid } from "@radix-ui/themes";
+import { Card, Flex, Text, Strong, Heading, Separator, Box, Grid, Button, DropdownMenu } from "@radix-ui/themes";
 import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from "react";
 import { Step } from "../../types/step";
 import { Ingredient } from "../../types/ingredient";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 /*************************************
  * View Only Recipe  
@@ -10,22 +11,45 @@ import { Ingredient } from "../../types/ingredient";
  *************************************/
 interface IRenderRecipeObj {
     recipe: string;
+    onDelete: (title : string)=> void; 
 }
 
-const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe}) => {
+const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
     const recipeJson = JSON.parse(recipe);
     const ingArr : Ingredient[] = recipeJson.ingredients;
     const stepArr : Step [] = recipeJson.steps;
 
     const title = recipeJson.title === "" ? "No Title" : recipeJson.title
-    console.log(recipeJson)
 
     return(
         <Card style={{width:'100%', backgroundColor: 'var(--gray-5)'}}>
             <Flex direction="column" justify="between" p={'2'}>
-                <Flex justify="start" gap="1" direction={'column'}>
-                        <Heading as="h3" size="4">{title}</Heading>
-                        <Text size='2' color="gray">{recipeJson.description}</Text>
+                <Flex justify="end" gap="1" direction="row" style={{justifyContent:'space-between'}}> 
+                    <Flex justify="start" gap="1" direction={'column'}>
+                            <Heading as="h3" size="4">{title}</Heading>
+                            <Text size='2' color="gray">{recipeJson.description}</Text>
+                    </Flex>
+                    <Flex>
+                        <DropdownMenu.Root>
+                            <DropdownMenu.Trigger>
+                                <Button color="gray" variant="soft"> 
+                                    <DotsHorizontalIcon/>
+                                </Button>
+                            </DropdownMenu.Trigger>
+                                <DropdownMenu.Content>
+                                    <DropdownMenu.Item className="DropdownMenuItem" disabled>
+                   
+                                        Print
+                                    </DropdownMenu.Item>
+                                    <DropdownMenu.Item className="DropdownMenuItem" disabled>
+                                        Edit
+                                    </DropdownMenu.Item>
+                                    <DropdownMenu.Item className="DropdownMenuItem" onClick={()=>{onDelete(recipeJson.title)}}>
+                                        Delete 
+                                    </DropdownMenu.Item>
+                                </DropdownMenu.Content>
+                        </DropdownMenu.Root>
+                    </Flex>
                 </Flex>
                 <Separator style={{width: '100%', marginBottom:'1rem', marginTop:'1rem'}}/>
                 <Flex justify="start" gap="3" direction={'column'} pl={'4'}>
