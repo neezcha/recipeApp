@@ -42,7 +42,7 @@ const AllRecipiesPage : React.FC = () => {
                     {gotLocal.length > 0 ? 
                         gotLocal.map((recipeString)=>{
                             return(
-                            <RenderRecipe recipe={recipeString} key={recipeString}/>);
+                            <RenderRecipe recipe={recipeString} key={recipeString} onDelete={(title : string)=>localStorage.removeItem(title)}/>);
                         })
                     : <Box px={'5'}>
                         <Text size={'4'} weight={'bold'} color={'gray'}>

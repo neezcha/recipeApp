@@ -11,9 +11,10 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
  *************************************/
 interface IRenderRecipeObj {
     recipe: string;
+    onDelete: (title : string)=> void; 
 }
 
-const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe}) => {
+const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
     const recipeJson = JSON.parse(recipe);
     const ingArr : Ingredient[] = recipeJson.ingredients;
     const stepArr : Step [] = recipeJson.steps;
@@ -37,12 +38,13 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe}) => {
                             </DropdownMenu.Trigger>
                                 <DropdownMenu.Content>
                                     <DropdownMenu.Item className="DropdownMenuItem" disabled>
+                   
                                         Print
                                     </DropdownMenu.Item>
                                     <DropdownMenu.Item className="DropdownMenuItem" disabled>
                                         Edit
                                     </DropdownMenu.Item>
-                                    <DropdownMenu.Item className="DropdownMenuItem" onClick={()=>{localStorage.removeItem(recipeJson.title)}}>
+                                    <DropdownMenu.Item className="DropdownMenuItem" onClick={()=>{onDelete(recipeJson.title)}}>
                                         Delete 
                                     </DropdownMenu.Item>
                                 </DropdownMenu.Content>
