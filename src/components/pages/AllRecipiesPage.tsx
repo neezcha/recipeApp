@@ -20,7 +20,10 @@ const AllRecipiesPage : React.FC = () => {
         return values;
         
     };
-    let gotLocal = getLocal();
+    const [gotLocal, setGotLocal] = useState(getLocal());
+    useEffect(()=>{
+        setGotLocal(getLocal());
+    },[gotLocal]);
 
 
     return (

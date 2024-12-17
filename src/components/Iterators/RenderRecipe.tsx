@@ -19,7 +19,6 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe}) => {
     const stepArr : Step [] = recipeJson.steps;
 
     const title = recipeJson.title === "" ? "No Title" : recipeJson.title
-    console.log(recipeJson)
 
     return(
         <Card style={{width:'100%', backgroundColor: 'var(--gray-5)'}}>
@@ -43,7 +42,7 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe}) => {
                                     <DropdownMenu.Item className="DropdownMenuItem" disabled>
                                         Edit
                                     </DropdownMenu.Item>
-                                    <DropdownMenu.Item className="DropdownMenuItem" onClick={()=>{console.log("delete clicked")}}>
+                                    <DropdownMenu.Item className="DropdownMenuItem" onClick={()=>{localStorage.removeItem(recipeJson.title)}}>
                                         Delete 
                                     </DropdownMenu.Item>
                                 </DropdownMenu.Content>
