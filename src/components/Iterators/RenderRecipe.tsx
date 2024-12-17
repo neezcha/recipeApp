@@ -1,4 +1,4 @@
-import { Card, Flex, Text, Strong, Heading, Separator, Box, Grid, Button } from "@radix-ui/themes";
+import { Card, Flex, Text, Strong, Heading, Separator, Box, Grid, Button, DropdownMenu } from "@radix-ui/themes";
 import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from "react";
 import { Step } from "../../types/step";
 import { Ingredient } from "../../types/ingredient";
@@ -30,10 +30,24 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe}) => {
                             <Text size='2' color="gray">{recipeJson.description}</Text>
                     </Flex>
                     <Flex>
-                        <Button  color="gray" variant="soft">
-                            <DotsHorizontalIcon/>
-                        </Button>
-
+                        <DropdownMenu.Root>
+                            <DropdownMenu.Trigger>
+                                <Button color="gray" variant="soft"> 
+                                    <DotsHorizontalIcon/>
+                                </Button>
+                            </DropdownMenu.Trigger>
+                                <DropdownMenu.Content>
+                                    <DropdownMenu.Item className="DropdownMenuItem" disabled>
+                                        Print
+                                    </DropdownMenu.Item>
+                                    <DropdownMenu.Item className="DropdownMenuItem" disabled>
+                                        Edit
+                                    </DropdownMenu.Item>
+                                    <DropdownMenu.Item className="DropdownMenuItem" onClick={()=>{console.log("delete clicked")}}>
+                                        Delete 
+                                    </DropdownMenu.Item>
+                                </DropdownMenu.Content>
+                        </DropdownMenu.Root>
                     </Flex>
                 </Flex>
                 <Separator style={{width: '100%', marginBottom:'1rem', marginTop:'1rem'}}/>
