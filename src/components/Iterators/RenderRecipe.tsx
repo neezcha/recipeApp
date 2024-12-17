@@ -1,7 +1,8 @@
-import { Card, Flex, Text, Strong, Heading, Separator, Box, Grid } from "@radix-ui/themes";
+import { Card, Flex, Text, Strong, Heading, Separator, Box, Grid, Button } from "@radix-ui/themes";
 import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from "react";
 import { Step } from "../../types/step";
 import { Ingredient } from "../../types/ingredient";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 /*************************************
  * View Only Recipe  
@@ -23,9 +24,17 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe}) => {
     return(
         <Card style={{width:'100%', backgroundColor: 'var(--gray-5)'}}>
             <Flex direction="column" justify="between" p={'2'}>
-                <Flex justify="start" gap="1" direction={'column'}>
-                        <Heading as="h3" size="4">{title}</Heading>
-                        <Text size='2' color="gray">{recipeJson.description}</Text>
+                <Flex justify="end" gap="1" direction="row" style={{justifyContent:'space-between'}}> 
+                    <Flex justify="start" gap="1" direction={'column'}>
+                            <Heading as="h3" size="4">{title}</Heading>
+                            <Text size='2' color="gray">{recipeJson.description}</Text>
+                    </Flex>
+                    <Flex>
+                        <Button  color="gray" variant="soft">
+                            <DotsHorizontalIcon/>
+                        </Button>
+
+                    </Flex>
                 </Flex>
                 <Separator style={{width: '100%', marginBottom:'1rem', marginTop:'1rem'}}/>
                 <Flex justify="start" gap="3" direction={'column'} pl={'4'}>
