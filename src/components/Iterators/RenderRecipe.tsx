@@ -37,14 +37,13 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
                                 </Button>
                             </DropdownMenu.Trigger>
                                 <DropdownMenu.Content>
-                                    <DropdownMenu.Item className="DropdownMenuItem" disabled>
-                   
+                                    <DropdownMenu.Item disabled>
                                         Print
                                     </DropdownMenu.Item>
-                                    <DropdownMenu.Item className="DropdownMenuItem" disabled>
+                                    <DropdownMenu.Item disabled>
                                         Edit
                                     </DropdownMenu.Item>
-                                    <DropdownMenu.Item className="DropdownMenuItem" onClick={()=>{onDelete(recipeJson.title)}}>
+                                    <DropdownMenu.Item onClick={()=>{onDelete(recipeJson.title)}}>
                                         Delete 
                                     </DropdownMenu.Item>
                                 </DropdownMenu.Content>

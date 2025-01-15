@@ -1,6 +1,9 @@
-import React, { Dispatch, SetStateAction} from "react"
+import React, { Dispatch, SetStateAction, useState} from "react"
 import { menuItem } from "../../types/menuItem"
-import { Button, Checkbox, Heading, Flex, Separator, Switch } from '@radix-ui/themes'
+import { Button, Heading, Flex, DropdownMenu } from '@radix-ui/themes'
+import { Half2Icon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
+import { useAppState } from "../../app-state"
+
 
 interface IMenu{
     menuItem: menuItem
@@ -25,6 +28,27 @@ interface INavMenuProps {
 }
 
 const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {    
+    const appState = useAppState();
+
+    const [theme, setTheme] = useState('light');
+    const [modeIcon, setModeIcon] = useState(<SunIcon/>);
+    const setThemeMode = (mode: string) => {
+        switch(mode) {
+            case 'system':
+                appState.setUseSystemTheme(matchMedia('prefers-color-scheme: dark').matches);
+                setModeIcon(<Half2Icon/>);
+                break;
+            case 'dark':
+                appState.setDarkTheme(true);
+                setModeIcon(<MoonIcon/>);
+                break;
+            default:
+                appState.setDarkTheme(false);
+                setModeIcon(<SunIcon/>);
+                break;
+          }
+    }
+
     return <>
         <div id="navMENU">
             <Flex as="span" align="center" justify="between" gap="4" p="3">
@@ -43,9 +67,30 @@ const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {
                         </Button>
                     )})}
                 </Flex>
-                <Flex justify="end" gap="3"> 
-                    <Checkbox defaultChecked />
-                    <Switch defaultChecked />
+                <Flex justify="end" gap="3">
+                    <DropdownMenu.Root>
+                        <DropdownMenu.Trigger>
+                            <Button color="gray" variant="soft"> 
+                                {modeIcon}
+                            </Button>
+                        </DropdownMenu.Trigger>
+                            <DropdownMenu.Content>
+                                <DropdownMenu.RadioGroup value={theme} onValueChange={setTheme}>
+                                    <DropdownMenu.RadioItem value={'light'} onClick={()=>{setThemeMode('light')}}>
+                                    <SunIcon/>
+                                    Light
+                                </DropdownMenu.RadioItem>
+                                <DropdownMenu.RadioItem value={'dark'} onClick={()=>{setThemeMode('dark')}}>
+                                    <MoonIcon/>
+                                    Dark
+                                </DropdownMenu.RadioItem>
+                                <DropdownMenu.RadioItem value={'system'} onClick={()=>{setThemeMode('system')}}>
+                                    <Half2Icon/>
+                                    System 
+                                </DropdownMenu.RadioItem>
+                                </DropdownMenu.RadioGroup>
+                            </DropdownMenu.Content>
+                    </DropdownMenu.Root>
                 </Flex>
             </Flex>
         </div>
