@@ -1,6 +1,6 @@
 import React, { EventHandler, MouseEventHandler, useEffect, useState } from "react"
 import { menuItem } from "../../types/menuItem"
-import AddRecipePage from "../pages/AddRecipePage";
+import EditRecipePage from "../pages/AddRecipePage";
 import AllRecipiesPage from "../pages/AllRecipiesPage";
 import MealPrepPage from "../pages/MealPrepPage";
 
@@ -15,7 +15,7 @@ const UseDestionation : React.FC<IUseDest> = ({destination, menuArr}) => {
 
     return <div>
             {result === 'AllRecipiesPage' ? <AllRecipiesPage/> : null}
-            {result === 'AddRecipePage' ? <AddRecipePage/> : null}
+            {result === 'AddRecipePage' ? <EditRecipePage/> : null}
             {result === 'MealPrepPage' ? <MealPrepPage/> : null}
             
     </div>

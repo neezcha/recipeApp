@@ -16,9 +16,10 @@ import { UniqueKeyIngredient } from "../../types/uniqueKeys";
  * TO DO: update to EditRecipePage (empty recipe means new recipe) 
  * @param recipeObj 
  ***/
-interface IAddRecipePage {
+interface IEditRecipeProps {
+    recipe?: Recipe; 
 }
-const AddRecipePage : React.FC = () => {
+const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
 
     const blankRecipe : Recipe = {    
         title : "",
@@ -35,8 +36,10 @@ const AddRecipePage : React.FC = () => {
         index : 0,
         instruction : "" 
     };
+
+    const currRecipe = recipe ?? blankRecipe; 
     
-    const [newRecipe, setNewRecipe] = useState<Recipe>(blankRecipe); 
+    const [newRecipe, setNewRecipe] = useState<Recipe>(currRecipe); 
     const [newIngredient, setNewIngredient] = useState<Ingredient>(blankIngredient);
     const [newStep, setNewStep] = useState<Step>(blankStep);
 
@@ -306,4 +309,4 @@ const AddRecipePage : React.FC = () => {
     );
 }
 
-export default AddRecipePage; 
+export default EditRecipePage; 
