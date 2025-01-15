@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { QUOTES } from "../../const";
-import {Box, Heading, Text, Flex, Separator} from '@radix-ui/themes';
+import {Box, Heading, Text, Flex, Separator, Button} from '@radix-ui/themes';
 import RenderRecipe from "../Iterators/RenderRecipe";
+import EditRecipePage from "./AddRecipePage";
 
 const AllRecipiesPage : React.FC = () => {
 
@@ -34,6 +35,9 @@ const AllRecipiesPage : React.FC = () => {
                 <Flex width={'100%'} py={'5'}>
                     <Separator style={{width: '100%'}}/>
                 </Flex>
+                <Button onClick={()=>{ return (<div><EditRecipePage/></div>) }}>
+                    test
+                </Button>
                 <Flex direction={'column'} justify={'start'} align={'start'} gap={'4'} width={'100%'}>
                     {gotLocal.length > 0 ? 
                         gotLocal.map((recipeString)=>{
