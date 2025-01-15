@@ -3,6 +3,8 @@ import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from 
 import { Step } from "../../types/step";
 import { Ingredient } from "../../types/ingredient";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Recipe } from "../../types/recipe";
+import EditRecipePage from "../pages/AddRecipePage";
 
 /*************************************
  * View Only Recipe  
@@ -21,6 +23,18 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
 
     const title = recipeJson.title === "" ? "No Title" : recipeJson.title
 
+    const openEditRecipePage = (e :string) =>{
+        console.log("edit clicked")
+        // how to trun string into recipe obj 
+        const recipeObj : Recipe = {    
+            title : "temp title",
+            description: "this should be it's own file or util function",
+            ingredients: [],
+            steps: []
+        };
+        return( <EditRecipePage recipe={recipeObj}/>)
+    };
+
     return(
         <Card style={{width:'100%', backgroundColor: 'var(--gray-5)'}}>
             <Flex direction="column" justify="between" p={'2'}>
@@ -34,7 +48,7 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
                             <DropdownMenu.Trigger>
                                 <Button color="gray" variant="soft"> 
                                     <DotsHorizontalIcon/>
-                                </Button>
+                                </Button> 
                             </DropdownMenu.Trigger>
                                 <DropdownMenu.Content>
                                     <DropdownMenu.Item disabled>
