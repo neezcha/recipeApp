@@ -5,6 +5,7 @@ import { Ingredient } from "../../types/ingredient";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Recipe } from "../../types/recipe";
 import EditRecipePage from "../pages/AddRecipePage";
+import { useAppState } from "../../app-state";
 
 /*************************************
  * View Only Recipe  
@@ -17,22 +18,25 @@ interface IRenderRecipeObj {
 }
 
 const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
+    const appState = useAppState();
+    
     const recipeJson = JSON.parse(recipe);
     const ingArr : Ingredient[] = recipeJson.ingredients;
     const stepArr : Step [] = recipeJson.steps;
 
     const title = recipeJson.title === "" ? "No Title" : recipeJson.title
 
-    const openEditRecipePage = (e :string) =>{
+    const openEditRecipePage = () =>{
         console.log("edit clicked")
-        // how to trun string into recipe obj 
+        // string into recipe obj // jsonPrse 
         const recipeObj : Recipe = {    
             title : "temp title",
             description: "this should be it's own file or util function",
             ingredients: [],
             steps: []
         };
-        return( <EditRecipePage recipe={recipeObj}/>)
+        // return( <EditRecipePage recipe={recipeObj}/>)
+        return (appState.setPageDest('AddRecipePage'))
     };
 
     return(
@@ -54,7 +58,7 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
                                     <DropdownMenu.Item disabled>
                                         Print
                                     </DropdownMenu.Item>
-                                    <DropdownMenu.Item disabled>
+                                    <DropdownMenu.Item onClick={()=>{ openEditRecipePage() }}>
                                         Edit
                                     </DropdownMenu.Item>
                                     <DropdownMenu.Item onClick={()=>{onDelete(recipeJson.title)}}>
