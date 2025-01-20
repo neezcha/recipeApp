@@ -3,6 +3,7 @@ import { menuItem } from "../../types/menuItem"
 import EditRecipePage from "../pages/AddRecipePage";
 import AllRecipiesPage from "../pages/AllRecipiesPage";
 import MealPrepPage from "../pages/MealPrepPage";
+import { useAppState } from "../../app-state";
 
 interface IUseDest{
     destination : string;
@@ -10,13 +11,20 @@ interface IUseDest{
 }
 
 const UseDestionation : React.FC<IUseDest> = ({destination, menuArr}) => {
+    const appState = useAppState();
 
-    const result = menuArr.filter((m)=> m.dest === destination)[0]?.dest ?? undefined
+    const [crrPage, setCrrPage]= useState( menuArr.filter((m)=> m.dest === destination)[0]?.dest ?? undefined );
+    // const result = menuArr.filter((m)=> m.dest === destination)[0]?.dest ?? undefined
+
+    useEffect(()=>{
+        const newPage = menuArr.filter((m)=> m.dest === appState.pageDest)[0]?.dest ?? undefined
+        setCrrPage(newPage);
+    },[appState.pageDest])
 
     return <div>
-            {result === 'AllRecipiesPage' ? <AllRecipiesPage/> : null}
-            {result === 'AddRecipePage' ? <EditRecipePage/> : null}
-            {result === 'MealPrepPage' ? <MealPrepPage/> : null}
+            {crrPage === 'AllRecipiesPage' ? <AllRecipiesPage/> : null}
+            {crrPage === 'AddRecipePage' ? <EditRecipePage/> : null}
+            {crrPage === 'MealPrepPage' ? <MealPrepPage/> : null}
             
     </div>
 }
