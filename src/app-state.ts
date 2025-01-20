@@ -3,14 +3,19 @@ import {create} from 'zustand';
 export type ThemeMode = 'dark' | 'light'
 
 export interface AppState {
+    /** app theme: dark, light, system **/
     darkTheme: boolean;
     useSystemTheme: boolean;
     setUseSystemTheme: (useSystemTheme: boolean) => void;
     setDarkTheme: (darkTheme: boolean) => void;
     themeMode: ThemeMode; 
+    /** current page: dark, light, system **/
+     pageDest: String;
+     setPageDest: (pageDest: string) => void; 
 }
 
 export const useAppState = create<AppState>((set) => ({
+    /** app theme: dark, light, system **/
     darkTheme: false,
     useSystemTheme: false, 
     setUseSystemTheme: (useSystemTheme: boolean) =>
@@ -30,5 +35,13 @@ export const useAppState = create<AppState>((set) => ({
             }
         }),
     themeMode:'light',
+    /** current page: dark, light, system **/
+    pageDest: 'AllRecipiesPage',
+    setPageDest: (pageDest: string) =>
+        set(() => {
+            return {
+                pageDest,
+            }
+        }),
 
 }));
