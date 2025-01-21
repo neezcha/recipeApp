@@ -6,6 +6,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Recipe } from "../../types/recipe";
 import EditRecipePage from "../pages/AddRecipePage";
 import { useAppState } from "../../app-state";
+import { useNavigate } from "react-router-dom";
 
 /*************************************
  * View Only Recipe  
@@ -18,6 +19,7 @@ interface IRenderRecipeObj {
 }
 
 const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
+    const navigate = useNavigate();
     
     const recipeJson = JSON.parse(recipe);
     const ingArr : Ingredient[] = recipeJson.ingredients;
@@ -51,10 +53,10 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
                                     <DropdownMenu.Item disabled>
                                         Print
                                     </DropdownMenu.Item>
-                                    <DropdownMenu.Item>
+                                    <DropdownMenu.Item onClick={()=>navigate(`/edit-recipe/${title}`)}>
                                         Edit
                                     </DropdownMenu.Item>
-                                    <DropdownMenu.Item onClick={()=>{onDelete(recipeJson.title)}}>
+                                    <DropdownMenu.Item onClick={()=>{onDelete(title)}}>
                                         Delete 
                                     </DropdownMenu.Item>
                                 </DropdownMenu.Content>
