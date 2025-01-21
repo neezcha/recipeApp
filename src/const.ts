@@ -1,3 +1,24 @@
+import { menuItem } from "./types/menuItem";
+
+/*** ROUTS ***/
+const allRecipies : menuItem = {
+    title : "All Recipies",
+    dest : "AllRecipiesPage",
+    route: "all-recipies"
+}
+const addRecipies : menuItem = {
+    title : "Add a Recipe",
+    dest : "AddRecipePage",
+    route: "add-recipe"
+}
+const mealPrep : menuItem = {
+    title : "Meal Prep",
+    dest : "MealPrepPage",
+    route: "meal-prep"
+}
+export const navMenuItemArray : menuItem[] = [allRecipies, addRecipies, mealPrep];
+
+
 /*** EXAMPLES ***/
 export enum exampleEnum {
     KEY_NAME = "value",
