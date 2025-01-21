@@ -25,9 +25,10 @@ function App() {
       <Routes>
           <Route path="all-recipies" element={<AllRecipiesPage/>} />
           <Route path="add-recipe" element={<EditRecipePage/>} />
+          <Route path="edit-recipe" element={<EditRecipePage/>} />
           <Route path="edit-recipe/:recipeId" element={<EditRecipePage/>} />
           <Route path="meal-prep" element={<MealPrepPage/>} />
-       
+
       </Routes>
      { /*<MainPage/>*/ }
     </Theme>
