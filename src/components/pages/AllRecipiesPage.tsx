@@ -3,6 +3,7 @@ import { QUOTES } from "../../const";
 import {Box, Heading, Text, Flex, Separator, Button} from '@radix-ui/themes';
 import RenderRecipe from "../Iterators/RenderRecipe";
 import EditRecipePage from "./AddRecipePage";
+import { useNavigate } from "react-router-dom";
 
 const AllRecipiesPage : React.FC = () => {
 
@@ -20,7 +21,7 @@ const AllRecipiesPage : React.FC = () => {
     const [gotLocal, setGotLocal] = useState(getLocal());
     useEffect(()=>{
         setGotLocal(getLocal());
-    },[gotLocal]);
+    },[]);
 
 
     return (
@@ -31,13 +32,11 @@ const AllRecipiesPage : React.FC = () => {
                     <Text size={'2'} weight={'light'} color={'gray'}>
                     {QUOTES.BALANCED}
                     </Text>
+                
                 </Flex>
                 <Flex width={'100%'} py={'5'}>
                     <Separator style={{width: '100%'}}/>
                 </Flex>
-                <Button onClick={()=>{ return (<div><EditRecipePage/></div>) }}>
-                    test
-                </Button>
                 <Flex direction={'column'} justify={'start'} align={'start'} gap={'4'} width={'100%'}>
                     {gotLocal.length > 0 ? 
                         gotLocal.map((recipeString)=>{

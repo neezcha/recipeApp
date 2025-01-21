@@ -16,11 +16,6 @@ const UseDestionation : React.FC<IUseDest> = ({destination, menuArr}) => {
     const [crrPage, setCrrPage]= useState( menuArr.filter((m)=> m.dest === destination)[0]?.dest ?? undefined );
     // const result = menuArr.filter((m)=> m.dest === destination)[0]?.dest ?? undefined
 
-    useEffect(()=>{
-        const newPage = menuArr.filter((m)=> m.dest === appState.pageDest)[0]?.dest ?? undefined
-        setCrrPage(newPage);
-    },[appState.pageDest])
-
     return <div>
             {crrPage === 'AllRecipiesPage' ? <AllRecipiesPage/> : null}
             {crrPage === 'AddRecipePage' ? <EditRecipePage/> : null}

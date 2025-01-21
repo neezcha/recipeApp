@@ -1,37 +1,17 @@
-import React, { Dispatch, SetStateAction, useState} from "react"
-import { menuItem } from "../../types/menuItem"
+import React, { useState} from "react"
 import { Button, Heading, Flex, DropdownMenu } from '@radix-ui/themes'
 import { Half2Icon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { useAppState } from "../../app-state"
+import { useNavigate } from "react-router"
+import { navMenuItemArray } from "../../const"
 
 
-interface IMenu{
-    menuItem: menuItem
-}
-const allRecipies : menuItem = {
-    title : "All Recipies",
-    dest : "AllRecipiesPage"
-}
-const addRecipies : menuItem = {
-    title : "Add a Recipe",
-    dest : "AddRecipePage"
-}
-const mealPrep : menuItem = {
-    title : "Meal Prep",
-    dest : "MealPrepPage"
-}
-export const navMenuItemArray : menuItem[] = [allRecipies, addRecipies, mealPrep];
-
-
-interface INavMenuProps {
-    setDestination: Dispatch<SetStateAction<string>>,
-}
-
-const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {    
+const NavMenu : React.FC = () => {    
     const appState = useAppState();
+    const navigate = useNavigate();
 
     const [theme, setTheme] = useState('light');
-    const [modeIcon, setModeIcon] = useState(<SunIcon/>);
+    const [curModeIcon, setModeIcon] = useState(<SunIcon/>);
     const setThemeMode = (mode: string) => {
         switch(mode) {
             case 'system':
@@ -61,17 +41,20 @@ const NavMenu : React.FC <INavMenuProps> = ({setDestination}) => {
                         <Button 
                             className="pointer mr4"
                             variant="surface"
-                            onClick={()=> setDestination(element.dest)} 
+                            /* onClick={()=> setDestination(element.dest)} */
+                            /* onClick={()=>  navigate('all-recipies') } */
+                            onClick={()=> navigate(element.route) }
                             key={element.dest}>
-                        {element.title} 
+                            {element.title} 
                         </Button>
+
                     )})}
                 </Flex>
                 <Flex justify="end" gap="3">
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger>
                             <Button color="gray" variant="soft"> 
-                                {modeIcon}
+                                {curModeIcon}
                             </Button>
                         </DropdownMenu.Trigger>
                             <DropdownMenu.Content>

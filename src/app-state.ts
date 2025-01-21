@@ -9,9 +9,6 @@ export interface AppState {
     setUseSystemTheme: (useSystemTheme: boolean) => void;
     setDarkTheme: (darkTheme: boolean) => void;
     themeMode: ThemeMode; 
-    /** current page: dark, light, system **/
-     pageDest: String;
-     setPageDest: (pageDest: string) => void; 
 }
 
 export const useAppState = create<AppState>((set) => ({
@@ -35,13 +32,5 @@ export const useAppState = create<AppState>((set) => ({
             }
         }),
     themeMode:'light',
-    /** current page: dark, light, system **/
-    pageDest: 'AllRecipiesPage',
-    setPageDest: (pageDest: string) =>
-        set(() => {
-            return {
-                pageDest,
-            }
-        }),
 
 }));

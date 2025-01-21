@@ -18,7 +18,6 @@ interface IRenderRecipeObj {
 }
 
 const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
-    const appState = useAppState();
     
     const recipeJson = JSON.parse(recipe);
     const ingArr : Ingredient[] = recipeJson.ingredients;
@@ -28,15 +27,9 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
 
     const openEditRecipePage = () =>{
         console.log("edit clicked")
-        // string into recipe obj // jsonPrse 
-        const recipeObj : Recipe = {    
-            title : "temp title",
-            description: "this should be it's own file or util function",
-            ingredients: [],
-            steps: []
-        };
+        // string to recipe obj // jsonPrse 
         // return( <EditRecipePage recipe={recipeObj}/>)
-        return (appState.setPageDest('AddRecipePage'))
+        return (null)
     };
 
     return(
@@ -58,7 +51,7 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
                                     <DropdownMenu.Item disabled>
                                         Print
                                     </DropdownMenu.Item>
-                                    <DropdownMenu.Item onClick={()=>{ openEditRecipePage() }}>
+                                    <DropdownMenu.Item>
                                         Edit
                                     </DropdownMenu.Item>
                                     <DropdownMenu.Item onClick={()=>{onDelete(recipeJson.title)}}>
