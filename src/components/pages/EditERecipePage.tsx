@@ -8,46 +8,69 @@ import { json } from "stream/consumers";
 import RenderStep from "../Iterators/UpdateStepsObj";
 import isEqual from "lodash/isEqual";
 import { Card, Button, Box, Text, TextField, TextArea, Heading, Flex, Grid, Select, Separator, Strong, Checkbox } from '@radix-ui/themes'
-import { AmericanFluidUnitsEnum, AmericanWeightUnitsEnum, conversionAmericanFluidUnitsToLeter, DropDownSegment, InputSegment, miscUnits, MiscUnitsEnum, QUOTES, usFluidUnits, usWeightUnits } from "../../const";
+import { AmericanFluidUnitsEnum, AmericanWeightUnitsEnum, blankIngredient, blankRecipe, blankStep, conversionAmericanFluidUnitsToLeter, DropDownSegment, InputSegment, miscUnits, MiscUnitsEnum, QUOTES, usFluidUnits, usWeightUnits } from "../../const";
 import { CheckCircledIcon, PlusCircledIcon, CrossCircledIcon, ThickArrowDownIcon, ThickArrowUpIcon, StarIcon, StarFilledIcon, CursorTextIcon } from '@radix-ui/react-icons'
 import { UniqueKeyIngredient } from "../../types/uniqueKeys";
+import { useParams } from "react-router-dom";
 
 /***
  * TO DO: update to EditRecipePage (empty recipe means new recipe) 
  * @param recipeObj 
  ***/
-interface IEditRecipeProps {
-    recipe?: Recipe; 
-}
-const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
 
-    const blankRecipe : Recipe = {    
-        title : "",
-        description: "",
-        ingredients: [],
-        steps: []
-    };
-    const blankIngredient : Ingredient = {
-        amount: 0,
-        unit: "unit",
-        name: ""
-    };
-    const blankStep : Step = {
-        index : 0,
-        instruction : "" 
-    };
+const EditRecipePage : React.FC = () => {
+    const { recipeId } = useParams();
 
-    const currRecipe = recipe ?? blankRecipe; 
     
-    const [newRecipe, setNewRecipe] = useState<Recipe>(currRecipe); 
+    const [editingRecipe, setEditingRecipe] = useState<boolean>(false); 
+
+    const [crrRecipe, setCrrRecipe] = useState<Recipe>(blankRecipe);
+    const [currIngredientList, setCurrIngredientList] = useState<Ingredient[]>([]);
+    const [currStepList, setCurrStepsList] = useState<Step[]>([]);
+
+    useEffect(()=>{
+        if(recipeId){
+            const localRecipe = localStorage.getItem(recipeId);
+            if(!!localRecipe){
+                setCrrRecipe( JSON.parse(localRecipe) );
+                setEditingRecipe(true);
+            }
+        }
+    },[]);
+    useEffect(()=>{
+        setCurrIngredientList([...crrRecipe.ingredients]);
+        setCurrStepsList([...crrRecipe.steps]);
+    },[crrRecipe])
+
     const [newIngredient, setNewIngredient] = useState<Ingredient>(blankIngredient);
     const [newStep, setNewStep] = useState<Step>(blankStep);
 
+    /****************  to do: 1/20/24
+     * bug: cannot go from edit recipe to other pages using nav menu
+     * save changes to existing recipe
+     * save new ingredient/step to existing recipe
+     *****************/
+
+    // to remove 
+    const [newRecipe, setNewRecipe] = useState<Recipe>(blankRecipe);
+    const crrIngredientList = [...newRecipe.ingredients];
+    const [ingredientList, setIngredientList] = useState([...crrIngredientList]);
+    const currStepsList = [...newRecipe.steps];
+    const [stepList, setStepList] = useState(currStepsList);
+    
+    /************************************************************************************** 
+    const [newRecipe, setNewRecipe] = useState<Recipe>(currRecipe); 
+    const [newIngredient, setNewIngredient] = useState<Ingredient>(blankIngredient);
+    const [newStep, setNewStep] = useState<Step>(blankStep);
+    **************************************************************************************/
+
+    /************************************************************************************** 
     // inferred state
     const crrIngredientList = [...newRecipe.ingredients];
     const [ingredientList, setIngredientList] = useState([...crrIngredientList]);
     const currStepsList = [...newRecipe.steps];
     const [stepList, setStepList] = useState(currStepsList);
+    **************************************************************************************/
     
     // sort step list
     useEffect(()=>{
@@ -57,21 +80,21 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
         })
 
         if(!isEqual(tempList, stepList)){
-            setNewRecipe({ ...newRecipe, steps:tempList})
+            setCrrRecipe({ ...crrRecipe, steps:tempList})
         }
     }, [stepList]);
 
     // update display components 
     useEffect(()=>{
-        setStepList([...newRecipe.steps]);
-        setIngredientList([...newRecipe.ingredients]);
-    },[newRecipe]);
-
+        setStepList([...crrRecipe.steps]);
+        setIngredientList([...crrRecipe.ingredients]);
+    },[crrRecipe]);
+    
     return (
         <Flex id={'new-recipe-page'} as={"span"} m={'4'}>
             <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'}>
                 <Flex gap={'2'} direction={'column'}>
-                    <Heading as="h2"> Add Recipe! </Heading>
+                    <Heading as="h2"> Add Recipe </Heading>
                     <Text size={'2'} weight={'light'} color={'gray'}>
                     {QUOTES.BREAD}
                     </Text>
@@ -82,7 +105,7 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                 <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'}>
                     {/*** SECTION Meta ***/}
                     <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'} py={'3'}>
-                        <Heading as="h3"> {newRecipe.title} </Heading>
+                        <Heading as="h3"> {crrRecipe.title} </Heading>
                         <Card style={{width: '100%'}}>
                             <Flex 
                                 direction={'column'}
@@ -94,19 +117,19 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                                 width={'100%'}
                                 p={'2'}
                             >
-                                <Text as="label" color={'gray'}><Strong>RecipeTitle:</Strong></Text>
+                                <Text as="label" color={'gray'}><Strong>Recipe Title:</Strong></Text>
                                 <TextField.Root
-                                    name="newRecipeTitleInputFeild"
-                                    onChange={(e)=>setNewRecipe({ ...newRecipe, title:e.currentTarget.value})} 
-                                    value={newRecipe.title}
+                                    name="crrRecipeTitleInputFeild"
+                                    onChange={(e)=>setCrrRecipe({ ...crrRecipe, title:e.currentTarget.value})} 
+                                    value={crrRecipe.title}
                                     placeholder={"Enter Recipe Title"}
                                     style={{width: '100%'}}
                                 />
                                 <Text as="label" color={'gray'}><Strong>Recipe Description:</Strong></Text>
                                 <TextArea
-                                    name="newRecipeDescInputFeild"
-                                    onChange={(e)=>setNewRecipe({ ...newRecipe, description:e.currentTarget.value})} 
-                                    value={newRecipe.description}
+                                    name="crrRecipeDescInputFeild"
+                                    onChange={(e)=>setCrrRecipe({ ...crrRecipe, description:e.currentTarget.value})} 
+                                    value={crrRecipe.description}
                                     placeholder={"Enter Recipe Description"}
                                     rows={3}
                                     style={{width: '100%'}}
@@ -118,9 +141,9 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                     <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'} py={'3'}>
                         <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'}>
                             <Heading as="h3"> Ingredients </Heading>
-                            {ingredientList.map((ingredient, index)=>{
+                            {currIngredientList.map((ingredient, index)=>{
                                 return (
-                                    <RenderIngredient ingredient={ingredient} recipe={newRecipe} setRecipe={setNewRecipe} index={index} key={`${index}-${ingredient.name}`}/>
+                                    <RenderIngredient ingredient={ingredient} recipe={crrRecipe} setRecipe={setCrrRecipe} index={index} key={`${index}-${ingredient.name}`}/>
                                 )
                             })}
                             <Card style={{width: '100%', background:'#BBF3FEF7'}}>
@@ -130,7 +153,7 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                                         <Flex direction={'column'} gap="2">
                                             <Text as="label"><Strong>Quantity:</Strong></Text>
                                             <TextField.Root
-                                                name="newRecipeIngredientsAmountInputFeild"
+                                                name="crrRecipeIngredientsAmountInputFeild"
                                                 autoFocus
                                                 size="2"
                                                 style={{width: '70px'}}
@@ -144,7 +167,7 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                                             <Text as="label"><Strong>Unit:</Strong></Text>
                                             <Select.Root 
                                                 defaultValue="unit" 
-                                                name="newRecipeIngredientUnitInputFeild" 
+                                                name="crrRecipeIngredientUnitInputFeild" 
                                                 value={newIngredient.unit}
                                                 onValueChange={
                                                     (e)=>{
@@ -183,7 +206,7 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                                         <Flex direction={'column'} gap="2" style={{width: '100%'}}>
                                             <Text as="label"><Strong>Ingredient:</Strong></Text>
                                             <TextField.Root
-                                                name="newRecipeIngredientsNameInputFeild"
+                                                name="crrRecipeIngredientsNameInputFeild"
                                                 onChange={(e)=>setNewIngredient({...newIngredient, name:e.currentTarget.value}) }
                                                 value={newIngredient.name} 
                                                 placeholder="Enter Ingredient Name"
@@ -197,7 +220,7 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                                             radius={'full'} 
                                             size={'4'}
                                             onClick={()=>{
-                                                setNewRecipe({...newRecipe, ingredients: [...newRecipe.ingredients, newIngredient]});
+                                                setCrrRecipe({...crrRecipe, ingredients: [...crrRecipe.ingredients, newIngredient]});
                                                 setNewIngredient(blankIngredient);
                                             }}
                                             >
@@ -212,8 +235,8 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                     <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'} py={'3'}>
                         <Flex direction={'column'} justify={'start'} align={'start'} width={'100%'} gap={'2'}>
                             <Heading as="h3"> Instructions </Heading>
-                            {stepList.map((step, index)=> {return (
-                                 <RenderStep step={step} recipe={newRecipe} setRecipe={setNewRecipe} key={`${step.instruction}`}/>
+                            {currStepList.map((step, index)=> {return (
+                                 <RenderStep step={step} recipe={crrRecipe} setRecipe={setCrrRecipe} key={`${step.instruction}`}/>
                        
                             )    
                         })}
@@ -242,7 +265,7 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                                         onClick={(e)=> {
                                             /** TO DO steps validation **/
                                             const newStepIndexVar = stepList.length??0;
-                                            setNewRecipe({ ...newRecipe, steps:[...newRecipe.steps, {index: newStepIndexVar, instruction:newStep.instruction??""}] });
+                                            setCrrRecipe({ ...crrRecipe, steps:[...crrRecipe.steps, {index: newStepIndexVar, instruction:newStep.instruction??""}] });
                                             setNewStep({...newStep, instruction:""});
                                         }}
                                     >
@@ -289,16 +312,16 @@ const EditRecipePage : React.FC<IEditRecipeProps> = ({recipe}) => {
                                 type={"submit"}
                                 onClick={(e)=> {
                                     e.preventDefault();
-                                    console.log(newRecipe);
-                                    window.localStorage.setItem( newRecipe.title ,JSON.stringify(newRecipe) );
-                                    setNewRecipe(blankRecipe)
+                                    console.log(crrRecipe);
+                                    window.localStorage.setItem( crrRecipe.title ,JSON.stringify(crrRecipe) );
+                                    setCrrRecipe(blankRecipe)
                                 }}
                             > 
                                 Save Locally 
                             </Button>
                             <Button
                                 variant={'soft'}
-                                onClick={()=> setNewRecipe(blankRecipe) }
+                                onClick={()=> setCrrRecipe(blankRecipe) }
                             > 
                                 Clear Recipe </Button>
                         </Flex>

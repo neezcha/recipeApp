@@ -4,7 +4,7 @@ import { Step } from "../../types/step";
 import { Ingredient } from "../../types/ingredient";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Recipe } from "../../types/recipe";
-import EditRecipePage from "../pages/AddRecipePage";
+import EditRecipePage from "../pages/EditERecipePage";
 import { useAppState } from "../../app-state";
 import { useNavigate } from "react-router-dom";
 
@@ -26,13 +26,6 @@ const RenderRecipe : React.FC<IRenderRecipeObj>= ({recipe, onDelete}) => {
     const stepArr : Step [] = recipeJson.steps;
 
     const title = recipeJson.title === "" ? "No Title" : recipeJson.title
-
-    const openEditRecipePage = () =>{
-        console.log("edit clicked")
-        // string to recipe obj // jsonPrse 
-        // return( <EditRecipePage recipe={recipeObj}/>)
-        return (null)
-    };
 
     return(
         <Card style={{width:'100%', backgroundColor: 'var(--gray-5)'}}>

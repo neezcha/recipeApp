@@ -7,7 +7,7 @@ import '@radix-ui/themes/styles.css';
 
 import NavMenu from './components/Navigation/Menu';
 import AllRecipiesPage from './components/pages/AllRecipiesPage';
-import EditRecipePage from './components/pages/AddRecipePage';
+import EditRecipePage from './components/pages/EditERecipePage';
 import MealPrepPage from './components/pages/MealPrepPage';
 
 function App() {
@@ -23,6 +23,7 @@ function App() {
       <NavMenu />
       <Separator size="4" />
       <Routes>
+          <Route path="/" element={<MealPrepPage/>} />
           <Route path="all-recipies" element={<AllRecipiesPage/>} />
           <Route path="add-recipe" element={<EditRecipePage/>} />
           <Route path="edit-recipe" element={<EditRecipePage/>} />

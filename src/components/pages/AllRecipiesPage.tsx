@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { QUOTES } from "../../const";
 import {Box, Heading, Text, Flex, Separator, Button} from '@radix-ui/themes';
 import RenderRecipe from "../Iterators/RenderRecipe";
-import EditRecipePage from "./AddRecipePage";
+import EditRecipePage from "./EditERecipePage";
 import { useNavigate } from "react-router-dom";
 
 import axios from 'axios'; 

@@ -1,6 +1,6 @@
 import React, { EventHandler, MouseEventHandler, useEffect, useState } from "react"
 import { menuItem } from "../../types/menuItem"
-import EditRecipePage from "../pages/AddRecipePage";
+import EditRecipePage from "../pages/EditERecipePage";
 import AllRecipiesPage from "../pages/AllRecipiesPage";
 import MealPrepPage from "../pages/MealPrepPage";
 import { useAppState } from "../../app-state";
