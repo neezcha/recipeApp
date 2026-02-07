@@ -3,6 +3,10 @@ import { QUOTES } from "../../const";
 import {Box, Heading, Text, Flex, Separator} from '@radix-ui/themes';
 import RenderRecipe from "../Iterators/RenderRecipe";
 
+import axios from 'axios'; 
+
+
+
 const AllRecipiesPage : React.FC = () => {
 
     const getLocal = () =>{
@@ -21,7 +25,31 @@ const AllRecipiesPage : React.FC = () => {
         setGotLocal(getLocal());
     },[gotLocal]);
 
+    const [apiRecipes, setApiRecipes] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const API_BASE_URL = 'http://localhost:8080/api/recipes';
 
+    useEffect(() => {
+        // 1. Fetch data when the component mounts
+        axios.get(API_BASE_URL)
+            .then(response => {
+                // 2. Data is received from Spring Boot (as JSON)
+                setApiRecipes(response.data); 
+                setLoading(false);
+                console.log(response);
+            })
+            .catch(err => {
+                // 3. Handle any connection or server errors
+                console.error("Error fetching recipes:", err);
+                setError("An error has occured :(");
+                setLoading(false);
+            });
+    }, []); // Empty dependency array means this runs only on mount
+
+    if (loading) return <div>Loading recipes...</div>;
+    if(error!="") return <div>{error}</div>;
+    
     return (
         <Box id={'new-recipe-page'} m={'4'}>
             <Flex direction={'column'} justify={'start'} align={'start'}>
