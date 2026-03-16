@@ -27,7 +27,6 @@ const AllRecipiesPage : React.FC = () => {
 
     const [apiRecipes, setApiRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
     const API_BASE_URL = 'http://localhost:8080/api/recipes';
 
     useEffect(() => {
@@ -42,13 +41,11 @@ const AllRecipiesPage : React.FC = () => {
             .catch(err => {
                 // 3. Handle any connection or server errors
                 console.error("Error fetching recipes:", err);
-                setError("An error has occured :(");
                 setLoading(false);
             });
     }, []); // Empty dependency array means this runs only on mount
 
     if (loading) return <div>Loading recipes...</div>;
-    if(error!="") return <div>{error}</div>;
     
     return (
         <Box id={'new-recipe-page'} m={'4'}>
@@ -70,7 +67,7 @@ const AllRecipiesPage : React.FC = () => {
                         })
                     : <Box px={'5'}>
                         <Text size={'4'} weight={'bold'} color={'gray'}>
-                            No Recipies... yet
+                            No Recipes... yet
                         </Text>
                       </Box>
                     }
