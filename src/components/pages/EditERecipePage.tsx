@@ -22,7 +22,8 @@ const EditRecipePage : React.FC = () => {
     const { recipeId } = useParams();
 
     
-    const [editingRecipe, setEditingRecipe] = useState<boolean>(false); 
+    const [editingRecipe, setEditingRecipe] = useState<boolean>(false);
+    const [origionalTitle, setOrigionalTitle] = useState<string>("");
 
     const [crrRecipe, setCrrRecipe] = useState<Recipe>(blankRecipe);
     const [currIngredientList, setCurrIngredientList] = useState<Ingredient[]>([]);
@@ -31,9 +32,11 @@ const EditRecipePage : React.FC = () => {
     useEffect(()=>{
         if(recipeId){
             const localRecipe = localStorage.getItem(recipeId);
-            if(!!localRecipe){
+            console.log(localRecipe);
+            if(localRecipe){
                 setCrrRecipe( JSON.parse(localRecipe) );
                 setEditingRecipe(true);
+                setOrigionalTitle(JSON.parse(localRecipe).title);
             }
         }
     },[]);
@@ -313,7 +316,10 @@ const EditRecipePage : React.FC = () => {
                                 onClick={(e)=> {
                                     e.preventDefault();
                                     console.log(crrRecipe);
-                                    window.localStorage.setItem( crrRecipe.title ,JSON.stringify(crrRecipe) );
+                                    console.log(editingRecipe);
+                                    console.log(origionalTitle);
+
+                                    editingRecipe ? window.localStorage.setItem(origionalTitle ,JSON.stringify(crrRecipe)) : window.localStorage.setItem(crrRecipe.title, JSON.stringify(crrRecipe) );
                                     setCrrRecipe(blankRecipe)
                                 }}
                             > 
