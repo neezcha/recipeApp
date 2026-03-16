@@ -1,3 +1,44 @@
+import { Ingredient } from "./types/ingredient";
+import { menuItem } from "./types/menuItem";
+import { Recipe } from "./types/recipe";
+import { Step } from "./types/step";
+
+/*** ROUTS ***/
+const allRecipies : menuItem = {
+    title : "All Recipies",
+    dest : "AllRecipiesPage",
+    route: "all-recipies"
+}
+const addRecipies : menuItem = {
+    title : "Add a Recipe",
+    dest : "AddRecipePage",
+    route: "add-recipe"
+}
+const mealPrep : menuItem = {
+    title : "Meal Prep",
+    dest : "MealPrepPage",
+    route: "meal-prep"
+}
+export const navMenuItemArray : menuItem[] = [allRecipies, addRecipies, mealPrep];
+
+/*** EMPTY RECIPE ***/
+export const blankRecipe : Recipe = {    
+        title : "",
+        description: "",
+        ingredients: [],
+        steps: []
+    };
+export const blankIngredient : Ingredient = {
+        amount: 0,
+        unit: "unit",
+        name: ""
+    };
+export const blankStep : Step = {
+        index : 0,
+        instruction : "" 
+    };
+
+
 /*** EXAMPLES ***/
 export enum exampleEnum {
     KEY_NAME = "value",
@@ -127,4 +168,5 @@ export const QUOTES = {
     "WELL" : "One cannot think well, love well, sleep well, if one has not dined well. — Virginia Woolf",
     "BALANCED" : "Food is an important part of a balanced diet. — Fran Lebowitz",
     "HUNGER" : "The best seasoning for food is hunger; for drink, thirst. — Socrates",
+    "DICKINSON": "I had been hungry, all the Years—/ My Noon had Come—to dine—/ I trembling drew the Table near—/ And touched the Curious Wine—// ’Twas this on Tables I had seen—/ When turning, hungry, Home/ I looked in Windows, for the Wealth/ I could not hope—for Mine—// I did not know the ample Bread—/ ’Twas so unlike the Crumb/ The Birds and I, had often shared/ In Nature’s—Dining Room—// The Plenty hurt me—’twas so new—/ Myself felt ill—and odd—/ As Berry—of a Mountain Bush—/ Transplanted—to a Road—// Nor was I hungry—so I found/ That Hunger—was a way/ Of Persons outside Windows—/ The Entering—takes away—// -Emily Dickinson"
 }

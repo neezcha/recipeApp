@@ -1,8 +1,9 @@
 import React, { EventHandler, MouseEventHandler, useEffect, useState } from "react"
 import { menuItem } from "../../types/menuItem"
-import AddRecipePage from "../pages/AddRecipePage";
+import EditRecipePage from "../pages/EditERecipePage";
 import AllRecipiesPage from "../pages/AllRecipiesPage";
 import MealPrepPage from "../pages/MealPrepPage";
+import { useAppState } from "../../app-state";
 
 interface IUseDest{
     destination : string;
@@ -10,13 +11,15 @@ interface IUseDest{
 }
 
 const UseDestionation : React.FC<IUseDest> = ({destination, menuArr}) => {
+    const appState = useAppState();
 
-    const result = menuArr.filter((m)=> m.dest === destination)[0]?.dest ?? undefined
+    const [crrPage, setCrrPage]= useState( menuArr.filter((m)=> m.dest === destination)[0]?.dest ?? undefined );
+    // const result = menuArr.filter((m)=> m.dest === destination)[0]?.dest ?? undefined
 
     return <div>
-            {result === 'AllRecipiesPage' ? <AllRecipiesPage/> : null}
-            {result === 'AddRecipePage' ? <AddRecipePage/> : null}
-            {result === 'MealPrepPage' ? <MealPrepPage/> : null}
+            {crrPage === 'AllRecipiesPage' ? <AllRecipiesPage/> : null}
+            {crrPage === 'AddRecipePage' ? <EditRecipePage/> : null}
+            {crrPage === 'MealPrepPage' ? <MealPrepPage/> : null}
             
     </div>
 }

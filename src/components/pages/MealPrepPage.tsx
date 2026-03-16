@@ -1,5 +1,5 @@
 import { Recipe } from "../../types/recipe";
-import {Heading} from "@radix-ui/themes";
+import {Box, Flex, Heading} from "@radix-ui/themes";
 
 
 interface IMealPrepPage{
@@ -7,9 +7,13 @@ interface IMealPrepPage{
 
 const MealPrepPage : React.FC = () => {
 
-    return <>
-        <Heading as="h2">Meal Prep!</Heading>
-     </>; 
+    return (
+    <Box id={'meal-prep-page'} m={'4'}>
+        <Flex direction={'column'} justify={'start'} align={'start'}>
+            <Heading as="h2">Meal Prep!</Heading>
+        </Flex>
+    </Box>
+    ); 
 }
 
 export default MealPrepPage; 
