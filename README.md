@@ -1,46 +1,77 @@
-# Getting Started with Create React App
+# recipeApp-vite
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React + TypeScript recipe application built with [Vite](https://vitejs.dev/) and [Radix UI Themes](https://www.radix-ui.com/themes/docs/overview/getting-started).
+
+---
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) 22+
+- [Docker](https://www.docker.com/) (for containerised workflows)
+
+---
+
+## Local Development (without Docker)
+
+```bash
+npm install
+npm start          # Vite dev server → http://localhost:5173
+```
+
+---
 
 ## Available Scripts
 
-In the project directory, you can run:
+| Script | Description |
+|---|---|
+| `npm start` | Starts the Vite dev server at **http://localhost:5173** with hot-module replacement |
+| `npm run build` | Type-checks with `tsc` then bundles for production into `dist/` |
+| `npm run preview` | Serves the `dist/` folder locally to preview the production build |
+| `npm test` | Runs the Vitest test suite in watch mode |
+| `npm run coverage` | Runs tests once and generates a coverage report |
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Docker
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Docker support is provided for both development and production environments.
 
-### `npm test`
+### Development container
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the Vite dev server inside a container using **Node 22 Alpine**. The app is available at **http://localhost:5173**.
 
-### `npm run build`
+```bash
+# Build the image
+npm run docker:dev:build
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Run the container
+npm run docker:dev:run
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+> **Hot-reload with volume mount** — to get file-watching working while running in Docker, pass a volume mount directly:
+> ```bash
+> docker run -it --rm -p 5173:5173 -v ${PWD}/src:/app/src recipeapp-dev
+> ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Production container
 
-### `npm run eject`
+Multi-stage build: **Node 22 Alpine** compiles and bundles the app, then **nginx:alpine** serves the static output. The app is available at **http://localhost:3002**.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+# Build the image
+npm run docker:prod:build
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Run the container
+npm run docker:prod:run
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Docker scripts summary
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+| Script | What it does |
+|---|---|
+| `npm run docker:dev:build` | Builds the development Docker image (`recipeapp-dev`) |
+| `npm run docker:dev:run` | Runs the dev container, exposing port **5173** |
+| `npm run docker:prod:build` | Builds the production Docker image (`recipeapp-prod`) |
+| `npm run docker:prod:run` | Runs the prod container, exposing port **3002** |
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+---

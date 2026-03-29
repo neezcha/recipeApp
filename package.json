@@ -27,7 +27,11 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "docker:dev:build": "docker build -f Dockerfile.dev -t recipeapp-dev .",
+    "docker:dev:run": "docker run -it --rm -p 5173:5173 recipeapp-dev",
+    "docker:prod:build": "docker build -f Dockerfile.prod -t recipeapp-prod .",
+    "docker:prod:run": "docker run -d --rm -p 3002:80 recipeapp-prod"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.185",
