@@ -1,4 +1,5 @@
 export type menuItem = {
     title: string;
-    dest: string; // page to render
+    dest: string; 
+    route: string; // page to render
 }

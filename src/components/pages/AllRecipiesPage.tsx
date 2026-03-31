@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { QUOTES } from "../../const";
-import {Box, Heading, Text, Flex, Separator} from '@radix-ui/themes';
+import {Box, Heading, Text, Flex, Separator, Button} from '@radix-ui/themes';
 import RenderRecipe from "../Iterators/RenderRecipe";
+import EditRecipePage from "./EditERecipePage";
+import { useNavigate } from "react-router-dom";
 
 import axios from 'axios'; 
 
@@ -23,7 +25,7 @@ const AllRecipiesPage : React.FC = () => {
     const [gotLocal, setGotLocal] = useState(getLocal());
     useEffect(()=>{
         setGotLocal(getLocal());
-    },[gotLocal]);
+    },[]);
 
     const [apiRecipes, setApiRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -55,6 +57,7 @@ const AllRecipiesPage : React.FC = () => {
                     <Text size={'2'} weight={'light'} color={'gray'}>
                     {QUOTES.BALANCED}
                     </Text>
+                
                 </Flex>
                 <Flex width={'100%'} py={'5'}>
                     <Separator style={{width: '100%'}}/>

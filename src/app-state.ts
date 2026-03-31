@@ -3,6 +3,7 @@ import {create} from 'zustand';
 export type ThemeMode = 'dark' | 'light'
 
 export interface AppState {
+    /** app theme: dark, light, system **/
     darkTheme: boolean;
     useSystemTheme: boolean;
     setUseSystemTheme: (useSystemTheme: boolean) => void;
@@ -11,6 +12,7 @@ export interface AppState {
 }
 
 export const useAppState = create<AppState>((set) => ({
+    /** app theme: dark, light, system **/
     darkTheme: false,
     useSystemTheme: false, 
     setUseSystemTheme: (useSystemTheme: boolean) =>
